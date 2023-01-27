@@ -1,12 +1,12 @@
 <template>
   <div>
-    <main-nav />
+    <app-header-vue />
     <router-view />
   </div>
 </template>
 
 <script>
-import MainNav from "@/components/Navigation/MainNav.vue";
+import AppHeaderVue from "@/components/Navigation/AppHeader.vue";
 import { supabase } from "@supabase/supabase-js";
 import { onMounted, ref } from "vue";
 
@@ -25,7 +25,7 @@ onMounted(() => {
 export default {
   name: "App",
   components: {
-    MainNav,
+    AppHeaderVue,
   },
 };
 </script>

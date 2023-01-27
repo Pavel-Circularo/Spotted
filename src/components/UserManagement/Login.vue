@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-200 flex items-center justify-center h-screen">
-    <form class="bg-white p-6 rounded-lg" @submit.prevent="login">
+    <form class="bg-white p-6 rounded-lg" @submit.prevent="handleLogin">
       <h2 class="text-lg font-medium mb-4">Log in</h2>
       <div class="mb-4">
         <label class="block text-gray-700 font-medium mb-2" for="email">
@@ -34,14 +34,24 @@
           Log in
         </button>
       </div>
+      <router-link to="/forgotPassword">Forgot Password?</router-link>
     </form>
+    <div class="mt-5">
+      <a @click.prevent="handleLogin('github')">Github</a>
+    </div>
   </div>
 </template>
 
 <script>
-import { createClient } from "@supabase/supabase-js";
-import cookie from "js-cookie";
+import { ref } from "vue";
+import useAuthUser from "@/composables/UseAuthUser";
 
+const { login, loginWithSocialProvider } = useAuthUser();
+
+const form = ref({
+  email: "",
+  password: "",
+});
 export default {
   data() {
     return {
@@ -52,29 +62,15 @@ export default {
       error: null,
     };
   },
-  created() {
-    // Initialize Supabase with the URL and key from environment variables
-    this.supabase = createClient(
-      process.env.VUE_APP_SUPABASE_URL,
-      process.env.VUE_APP_SUPABASE_ANON_KEY
-    );
-  },
   methods: {
-    async login() {
+    async handleLogin(provider) {
       try {
-        const { email, password } = this.form;
-        // Send a request to Supabase to log in the user
-        const { token } = await this.supabase.auth.signInWithPassword({
-          email: email,
-          password: password,
-        });
-        // Save the token in an HttpOnly cookie
-        cookie.set("token", token, { httpOnly: true });
-        // Redirect the user to the dashboard
-        //this.$router.push("/");
+        provider
+          ? await loginWithSocialProvider(provider)
+          : await login(form.value);
+        this.$router.push({ name: "Me" });
       } catch (error) {
-        console.log(error);
-        this.error = error.message;
+        alert(error.message);
       }
     },
   },

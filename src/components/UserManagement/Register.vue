@@ -1,6 +1,6 @@
 <template>
   <div class="bg-gray-200 flex items-center justify-center h-screen">
-    <form class="bg-white p-6 rounded-lg" @submit.prevent="register">
+    <form class="bg-white p-6 rounded-lg" @submit.prevent="handleSubmit">
       <h2 class="text-lg font-medium mb-4">Register</h2>
       <div class="mb-4">
         <label class="block text-gray-700 font-medium mb-2" for="username">
@@ -51,49 +51,44 @@
 </template>
 
 <script>
-import { createClient } from "@supabase/supabase-js";
+import { ref } from "vue";
+import useAuthUser from "@/composables/UseAuthUser.js";
+
+const { register } = useAuthUser();
+
+const form = ref({
+  name: "",
+  email: "",
+  password: "",
+});
 
 export default {
   data() {
     return {
       form: {
-        email: "",
         username: "",
+        email: "",
         password: "",
       },
-      error: null,
     };
   },
-  created() {
-    // Initialize Supabase with the URL and key from environment variables
-    this.supabase = createClient(
-      process.env.VUE_APP_SUPABASE_URL,
-      process.env.VUE_APP_SUPABASE_ANON_KEY
-    );
-  },
   methods: {
-    async register() {
-      // Initialize the Supabase client
-      /* const supabase = createClient(
-        "https://izptjbyyibydlsfuaujz.supabase.co",
-        "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml6cHRqYnl5aWJ5ZGxzZnVhdWp6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2NzMyOTYxMjgsImV4cCI6MTk4ODg3MjEyOH0.-SyzrjRctkoUMdW4jwFSCd07ACAU-_vt1mQ5pWLM2R8"
-      ); */
+    handleSubmit() {
+      async () => {
+        try {
+          // use the register method from the AuthUser composable
+          await register(form.value);
 
-      // Register the user
-      try {
-        await this.supabase.auth.signUp({
-          email: this.email,
-          username: this.username,
-          password: this.password,
-        });
-        //this.error = "";
-        console.log("Successfully registered");
-        // Redirect the user to the login page or display a success message
-        this.$router.push({ name: "Login" });
-      } catch (error) {
-        this.error = error.message;
-        console.error(error);
-      }
+          // and redirect to a EmailConfirmation page the will instruct
+          // the user to confirm they're email address
+          this.$router.push({
+            name: "EmailConfirmation",
+            query: { email: form.value.email },
+          });
+        } catch (error) {
+          alert(error.message);
+        }
+      };
     },
   },
 };
