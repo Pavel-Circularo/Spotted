@@ -4,6 +4,7 @@ import RegisterView from "@/views/RegisterView.vue";
 import LoginView from "@/views/LoginView.vue";
 import EmailConfirmationView from "@/views/EmailConfirmationView.vue";
 import ForgotPasswordView from "@/views/ForgotPasswordView.vue";
+import UploadCarView from "@/views/UploadCarView.vue";
 import useAuthUser from "@/composables/UseAuthUser.js";
 
 const routes = [
@@ -33,12 +34,20 @@ const routes = [
     component: ForgotPasswordView,
   },
   {
-    name: "Me",
     path: "/me",
+    name: "Me",
     meta: {
       requiresAuth: true,
     },
     component: () => import("@/components/Shared/Me.vue"),
+  },
+  {
+    path: "/upload-car",
+    name: "UploadCar",
+    meta: {
+      requiresAuth: true,
+    },
+    component: UploadCarView,
   },
   {
     name: "Logout",

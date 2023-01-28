@@ -6,20 +6,20 @@
   </form>
 </template>
 
-<script>
-import useAuthUser from "@/composables/UseAuthUser.js";
+<script setup>
+import useAuthUser from "@/composables/UseAuthUser";
 import { ref } from "vue";
 
+// use necessary composables
 const { sendPasswordRestEmail } = useAuthUser();
 
+// keep up with email
 const email = ref("");
 
-export default {
-  methods: {
-    async handlePasswordReset() {
-      await sendPasswordRestEmail(email.value);
-      alert(`Password reset email sent to: ${email.value}`);
-    },
-  },
+// function to call on submit of the form
+// triggers sending the reset email to the user
+const handlePasswordReset = async () => {
+  await sendPasswordRestEmail(email.value);
+  alert(`Password reset email sent to: ${email.value}`);
 };
 </script>

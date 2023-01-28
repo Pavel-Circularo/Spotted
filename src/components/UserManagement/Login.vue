@@ -1,39 +1,10 @@
 <template>
-  <div class="bg-gray-200 flex items-center justify-center h-screen">
-    <form class="bg-white p-6 rounded-lg" @submit.prevent="handleLogin">
-      <h2 class="text-lg font-medium mb-4">Log in</h2>
-      <div class="mb-4">
-        <label class="block text-gray-700 font-medium mb-2" for="email">
-          Email
-        </label>
-        <input
-          id="email"
-          v-model="form.email"
-          class="border border-gray-400 p-2 rounded-lg w-full"
-          type="email"
-          required
-        />
-      </div>
-      <div class="mb-4">
-        <label class="block text-gray-700 font-medium mb-2" for="password">
-          Password
-        </label>
-        <input
-          id="password"
-          v-model="form.password"
-          class="border border-gray-400 p-2 rounded-lg w-full"
-          type="password"
-          required
-        />
-      </div>
-      <div class="flex items-center justify-between">
-        <button
-          class="bg-indigo-500 text-white py-2 px-4 rounded-lg hover:bg-indigo-600"
-          type="submit"
-        >
-          Log in
-        </button>
-      </div>
+  <div class="max-w-lg m-auto">
+    <form @submit.prevent="handleLogin()">
+      <h1 class="text-3xl mb-5">Login</h1>
+      <label>Email <input v-model="form.email" type="email" /></label>
+      <label>Password <input v-model="form.password" type="password" /></label>
+      <button>Login</button>
       <router-link to="/forgotPassword">Forgot Password?</router-link>
     </form>
     <div class="mt-5">
@@ -42,37 +13,31 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import { ref } from "vue";
 import useAuthUser from "@/composables/UseAuthUser";
+import { useRouter } from "vue-router";
 
+// Use necessary composables
+const router = useRouter();
 const { login, loginWithSocialProvider } = useAuthUser();
 
+// keep up with form data
 const form = ref({
   email: "",
   password: "",
 });
-export default {
-  data() {
-    return {
-      form: {
-        email: "",
-        password: "",
-      },
-      error: null,
-    };
-  },
-  methods: {
-    async handleLogin(provider) {
-      try {
-        provider
-          ? await loginWithSocialProvider(provider)
-          : await login(form.value);
-        this.$router.push({ name: "Me" });
-      } catch (error) {
-        alert(error.message);
-      }
-    },
-  },
+
+// call the proper login method from the AuthUser composable
+// on the submit of the form
+const handleLogin = async (provider) => {
+  try {
+    provider
+      ? await loginWithSocialProvider(provider)
+      : await login(form.value);
+    router.push({ name: "Home" });
+  } catch (error) {
+    alert(error.message);
+  }
 };
 </script>

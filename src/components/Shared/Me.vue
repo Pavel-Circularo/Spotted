@@ -4,14 +4,7 @@
   </div>
 </template>
 
-<script>
-import useAuthUser from "@/composables/UseAuthUser";
-
-export default {
-  data() {
-    return {
-      user: useAuthUser(),
-    };
-  },
-};
+<script setup>
+import useAuthUser from "@/composables/UseAuthUser.js";
+const { user } = useAuthUser();
 </script>
