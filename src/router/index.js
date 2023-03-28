@@ -5,6 +5,7 @@ import LoginView from "@/views/LoginView.vue";
 import EmailConfirmationView from "@/views/EmailConfirmationView.vue";
 import ForgotPasswordView from "@/views/ForgotPasswordView.vue";
 import UploadCarView from "@/views/UploadCarView.vue";
+import GalleryView from "@/views/GalleryView.vue";
 import useAuthUser from "@/composables/UseAuthUser.js";
 
 const routes = [
@@ -48,6 +49,14 @@ const routes = [
       requiresAuth: true,
     },
     component: UploadCarView,
+  },
+  {
+    path: "/gallery",
+    name: "Gallery",
+    meta: {
+      requiresAuth: true,
+    },
+    component: GalleryView,
   },
   {
     name: "Logout",

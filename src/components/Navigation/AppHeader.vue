@@ -8,6 +8,7 @@ const { isLoggedIn } = useAuthUser();
       <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
       <li><router-link :to="{ name: 'Me' }">Me</router-link></li>
       <li><router-link :to="{ name: 'UploadCar' }">Upload Car</router-link></li>
+      <li><router-link :to="{ name: 'Gallery' }">Gallery</router-link></li>
     </ul>
     <ul v-if="isLoggedIn()" class="flex gap-5 bg-gray-700 p-5">
       <li><router-link :to="{ name: 'Logout' }">Logout</router-link></li>
