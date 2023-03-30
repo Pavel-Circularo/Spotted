@@ -14,18 +14,12 @@
           v-model="form.brand"
           class="bg-gray-200 p-2 rounded-lg w-full"
           required
-          @change="fetchCarmakers"
         >
-          <option
-            v-for="brand in brands"
-            :key="brand.maker"
-            :value="brand.maker"
-          >
-            {{ brand }}
+          <option v-for="brand in brands" :key="brand.maker">
+            {{ brand.maker }}
           </option>
         </select>
       </div>
-      <p v-for="brand in brands" :key="brand.maker">{{ brand }}</p>
       <div class="mb-4">
         <label class="block text-gray-700 font-medium mb-2" for="model"
           >Model</label
@@ -85,69 +79,63 @@
 </template>
 
 <script>
-import { ref, onMounted, onBeforeMount } from "vue";
-import useSupabase from "@/composables/UseSupabase.js";
+//in this component composition API did nto work correctly so Options API it is
 import useAuthUser from "@/composables/UseAuthUser.js";
+import useSupabase from "@/composables/UseSupabase.js";
 import { v4 as uuidv4 } from "uuid";
 
 export default {
   name: "UploadForm",
-  setup() {
-    const { user } = useAuthUser();
-    const brands = [];
-
-    const form = {
-      brand: ref(""),
-      model: "",
-      color: "",
-      year: null,
-      url: "https://izptjbyyibydlsfuaujz.supabase.co/storage/v1/object/public/images/",
+  data() {
+    return {
+      brands: [],
+      form: {
+        brand: "",
+        model: "",
+        color: "",
+        year: null,
+        url: "https://izptjbyyibydlsfuaujz.supabase.co/storage/v1/object/public/images/",
+      },
+      fileInput: null,
     };
-
+  },
+  async beforeMount() {
     const { supabase } = useSupabase();
-    const fileInput = ref(null);
 
-    onBeforeMount(async () => {
-      /* const { data, error } = await supabase.from("car-makers").select("maker"); */
-      let { data: carmakers, error } = await supabase
-        .from("car-makers")
-        .select("maker");
-      if (error) {
-        console.error(error);
-      } else {
-        console.log(brands);
-        brands.value = carmakers;
-        console.log(brands);
-      }
-    });
+    let { data: carmakers, error } = await supabase
+      .from("car-makers")
+      .select("maker");
+    if (error) {
+      console.error(error);
+    } else {
+      this.brands = carmakers;
+    }
+  },
+  mounted() {
+    this.fileInput = document.querySelector("input[type=file]");
+  },
+  methods: {
+    async uploadImage() {
+      const file = this.fileInput.files[0];
+      const { user } = useAuthUser();
+      const { supabase } = useSupabase();
 
-    const uploadImage = async () => {
-      const file = fileInput.value.files[0];
       const response = await supabase.storage
         .from("images")
         .upload(user._rawValue.id + "/" + uuidv4(), file);
-      form.url = form.url + response.data.path;
-    };
-
-    const submitForm = async () => {
-      const formData = { ...form, user: user._rawValue.id };
+      this.form.url = this.form.url + response.data.path;
+    },
+    async submitForm() {
+      const { user } = useAuthUser();
+      const formData = { ...this.form, user: user._rawValue.id };
+      const { supabase } = useSupabase();
       const { data, error } = await supabase.from("cars").insert(formData);
       if (data) {
         console.log("Upload successful");
       } else {
         console.log(error);
       }
-    };
-
-    onMounted(() => {
-      fileInput.value = document.querySelector("input[type=file]");
-    });
-    return {
-      form,
-      fileInput,
-      uploadImage,
-      submitForm,
-    };
+    },
   },
 };
 </script>

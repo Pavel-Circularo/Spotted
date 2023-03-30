@@ -41,7 +41,6 @@ export default {
         console.error(error);
       } else {
         galleryData.value = cars;
-        console.log(cars);
       }
     };
 
