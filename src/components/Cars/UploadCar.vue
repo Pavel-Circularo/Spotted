@@ -9,14 +9,23 @@
         <label class="block text-gray-700 font-medium mb-2" for="brand"
           >Brand</label
         >
-        <input
+        <select
           id="brand"
           v-model="form.brand"
           class="bg-gray-200 p-2 rounded-lg w-full"
-          type="text"
           required
-        />
+          @change="fetchCarmakers"
+        >
+          <option
+            v-for="brand in brands"
+            :key="brand.maker"
+            :value="brand.maker"
+          >
+            {{ brand }}
+          </option>
+        </select>
       </div>
+      <p v-for="brand in brands" :key="brand.maker">{{ brand }}</p>
       <div class="mb-4">
         <label class="block text-gray-700 font-medium mb-2" for="model"
           >Model</label
@@ -76,7 +85,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeMount } from "vue";
 import useSupabase from "@/composables/UseSupabase.js";
 import useAuthUser from "@/composables/UseAuthUser.js";
 import { v4 as uuidv4 } from "uuid";
@@ -85,9 +94,10 @@ export default {
   name: "UploadForm",
   setup() {
     const { user } = useAuthUser();
+    const brands = [];
 
     const form = {
-      brand: "",
+      brand: ref(""),
       model: "",
       color: "",
       year: null,
@@ -96,6 +106,20 @@ export default {
 
     const { supabase } = useSupabase();
     const fileInput = ref(null);
+
+    onBeforeMount(async () => {
+      /* const { data, error } = await supabase.from("car-makers").select("maker"); */
+      let { data: carmakers, error } = await supabase
+        .from("car-makers")
+        .select("maker");
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(brands);
+        brands.value = carmakers;
+        console.log(brands);
+      }
+    });
 
     const uploadImage = async () => {
       const file = fileInput.value.files[0];
