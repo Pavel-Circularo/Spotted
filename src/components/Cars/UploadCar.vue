@@ -1,4 +1,11 @@
 <template>
+  <div
+    v-if="alert.show"
+    class="fixed bottom-4 right-4 bg-white p-4 rounded-lg shadow-md w-full max-w-md"
+    :class="`${alert.type}`"
+  >
+    {{ alert.message }}
+  </div>
   <div class="flex flex-col items-center justify-center h-screen">
     <form
       class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
@@ -29,6 +36,7 @@
           v-model="form.model"
           class="bg-gray-200 p-2 rounded-lg w-full"
           type="text"
+          :disabled="enableModel"
           required
         />
       </div>
@@ -52,7 +60,9 @@
           id="year"
           v-model="form.year"
           class="bg-gray-200 p-2 rounded-lg w-full"
-          type="text"
+          type="number"
+          min="1900"
+          max="2100"
           required
         />
       </div>
@@ -64,6 +74,7 @@
           id="image"
           class="bg-gray-200 p-2 rounded-lg w-full"
           type="file"
+          accept=".png, .jpg"
           required
           @change="uploadImage"
         />
@@ -79,7 +90,7 @@
 </template>
 
 <script>
-//in this component composition API did nto work correctly so Options API it is
+//in this component composition API did not work correctly so Options API it is
 import useAuthUser from "@/composables/UseAuthUser.js";
 import useSupabase from "@/composables/UseSupabase.js";
 import { v4 as uuidv4 } from "uuid";
@@ -97,7 +108,17 @@ export default {
         url: "https://izptjbyyibydlsfuaujz.supabase.co/storage/v1/object/public/images/",
       },
       fileInput: null,
+      alert: {
+        show: false,
+        message: "",
+        type: "",
+      },
     };
+  },
+  computed: {
+    enableModel() {
+      return this.form.brand.trim() === "";
+    },
   },
   async beforeMount() {
     const { supabase } = useSupabase();
@@ -125,15 +146,31 @@ export default {
         .upload(user._rawValue.id + "/" + uuidv4(), file);
       this.form.url = this.form.url + response.data.path;
     },
+    showAlert(message, type) {
+      this.alert.message = message;
+      this.alert.type = type;
+      this.alert.show = true;
+
+      setTimeout(() => {
+        this.alert.show = false;
+      }, 3000);
+    },
     async submitForm() {
       const { user } = useAuthUser();
       const formData = { ...this.form, user: user._rawValue.id };
       const { supabase } = useSupabase();
-      const { data, error } = await supabase.from("cars").insert(formData);
-      if (data) {
-        console.log("Upload successful");
+      const response = await supabase.from("cars").insert(formData);
+      let statusCode = response.status;
+      if (statusCode == 201) {
+        this.form.brand = "";
+        this.form.model = "";
+        this.form.color = "";
+        this.form.year = null;
+        this.fileInput = null;
+        this.showAlert("Upload successful", "bg-green-500 text-white");
       } else {
-        console.log(error);
+        this.showAlert("Upload failed", "bg-red-500 text-white");
+        console.log(response.error);
       }
     },
   },
