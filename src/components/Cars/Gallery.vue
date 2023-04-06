@@ -7,12 +7,23 @@
           :src="item.url"
           :alt="item.brand"
           class="w-full rounded-lg shadow-lg"
+          @click="enlargeImage(item.url)"
         />
         <div class="bg-white rounded-lg shadow-lg p-4">
           <h2 class="text-lg font-bold">{{ item.brand }} {{ item.model }}</h2>
           <p class="text-gray-500">{{ item.year }}</p>
         </div>
       </div>
+    </div>
+    <div
+      v-if="enlarged"
+      class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
+    >
+      <img
+        :src="enlarged"
+        class="max-h-screen max-w-screen rounded-lg shadow-lg"
+        @click="enlarged = null"
+      />
     </div>
   </div>
 </template>
@@ -28,6 +39,7 @@ export default {
     const galleryData = ref([]);
     const { user } = useAuthUser();
     const { supabase } = useSupabase();
+    const enlarged = ref(null);
 
     const fetchGalleryData = async () => {
       let { data: cars, error } = await supabase
@@ -36,7 +48,6 @@ export default {
         .eq("user", user._rawValue.id)
         .order("created_at", { ascending: false });
 
-      //const { data: cars, error } = await supabase.from("cars").select("*");
       if (error) {
         console.error(error);
       } else {
@@ -44,12 +55,17 @@ export default {
       }
     };
 
+    const enlargeImage = (url) => {
+      enlarged.value = url;
+    };
+
     onMounted(async () => {
       await fetchGalleryData();
     });
-
     return {
       galleryData,
+      enlargeImage,
+      enlarged,
     };
   },
 };
