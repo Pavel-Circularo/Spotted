@@ -1,8 +1,35 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-3xl font-bold my-4">Gallery</h1>
-    <div class="grid grid-cols-3 gap-4">
-      <div v-for="item in galleryData" :key="item.id">
+    <h1 class="text-4xl font-bold text-gray-800 my-4 text-center">Gallery</h1>
+    <div class="my-4 flex justify-center space-x-4">
+      <input
+        v-model="brandFilter"
+        type="text"
+        placeholder="Brand"
+        class="border-gray-400 border-2 rounded-lg p-2"
+      />
+      <input
+        v-model="modelFilter"
+        type="text"
+        placeholder="Model"
+        class="border-gray-400 border-2 rounded-lg p-2"
+      />
+      <input
+        v-model="yearFilter"
+        type="text"
+        placeholder="Year"
+        class="border-gray-400 border-2 rounded-lg p-2"
+      />
+      <input
+        v-model="colorFilter"
+        type="text"
+        placeholder="Color"
+        class="border-gray-400 border-2 rounded-lg p-2"
+      />
+    </div>
+
+    <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      <div v-for="item in filteredGalleryData" :key="item.id">
         <img
           :src="item.url"
           :alt="item.brand"
@@ -11,7 +38,8 @@
         />
         <div class="bg-white rounded-lg shadow-lg p-4">
           <h2 class="text-lg font-bold">{{ item.brand }} {{ item.model }}</h2>
-          <p class="text-gray-500">{{ item.year }}</p>
+          <p class="text-gray-500">Year: {{ item.year }}</p>
+          <p class="text-gray-500">Color: {{ item.color }}</p>
         </div>
       </div>
     </div>
@@ -29,7 +57,7 @@
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 import useSupabase from "@/composables/UseSupabase.js";
 import useAuthUser from "@/composables/UseAuthUser.js";
 
@@ -40,6 +68,11 @@ export default {
     const { user } = useAuthUser();
     const { supabase } = useSupabase();
     const enlarged = ref(null);
+
+    const brandFilter = ref("");
+    const modelFilter = ref("");
+    const yearFilter = ref("");
+    const colorFilter = ref("");
 
     const fetchGalleryData = async () => {
       let { data: cars, error } = await supabase
@@ -59,11 +92,27 @@ export default {
       enlarged.value = url;
     };
 
+    const filteredGalleryData = computed(() => {
+      return galleryData.value.filter((item) => {
+        return (
+          item.brand.toLowerCase().includes(brandFilter.value.toLowerCase()) &&
+          item.model.toLowerCase().includes(modelFilter.value.toLowerCase()) &&
+          item.year.toString().includes(yearFilter.value) &&
+          item.color.toLowerCase().includes(colorFilter.value.toLowerCase())
+        );
+      });
+    });
+
     onMounted(async () => {
       await fetchGalleryData();
     });
     return {
       galleryData,
+      brandFilter,
+      modelFilter,
+      yearFilter,
+      colorFilter,
+      filteredGalleryData,
       enlargeImage,
       enlarged,
     };
@@ -96,5 +145,10 @@ export default {
   .max-w-sm {
     max-width: calc((100% - 10rem) / 4);
   }
+}
+
+h1.text-gray-800 {
+  font-size: 2.5rem;
+  color: #35495e;
 }
 </style>

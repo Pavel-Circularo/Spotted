@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="bg-brand-gradient">
     <app-header-vue />
     <router-view />
   </div>
