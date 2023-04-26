@@ -5,33 +5,153 @@
         <img src="@/assets/logo.png" alt="Logo" class="h-16" />
       </router-link>
     </div>
+    <div class="relative lg:hidden">
+      <button
+        id="options-menu"
+        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-brand-green-1 bg-brand-white-1 hover:bg-brand-green-1 hover:text-brand-white-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green-1"
+        :class="{ 'bg-brand-green-1 text-brand-white-1': isMenuOpen }"
+        type="button"
+        aria-haspopup="true"
+        aria-expanded="true"
+        @click="isMenuOpen = !isMenuOpen"
+      >
+        Menu
+        <svg
+          class="ml-2 -mr-0.5 h-4 w-4"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+          fill="currentColor"
+          aria-hidden="true"
+        >
+          <path
+            fill-rule="evenodd"
+            d="M10 14l-5-5h10l-5 5z"
+            clip-rule="evenodd"
+          />
+        </svg>
+      </button>
 
-    <div class="w-full block flex-grow lg:flex lg:items-center lg:w-auto">
+      <div
+        v-show="isMenuOpen"
+        class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-brand-white-1 ring-1 ring-black ring-opacity-5 focus:outline-none"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="options-menu"
+      >
+        <div class="py-1" role="none">
+          <ul v-if="!isLoggedIn()">
+            <li>
+              <router-link
+                :to="{ name: 'Home' }"
+                class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
+                role="menuitem"
+                @click="isMenuOpen = false"
+              >
+                Home
+              </router-link>
+            </li>
+          </ul>
+          <ul v-else>
+            <li>
+              <router-link
+                :to="{ name: 'Me' }"
+                class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
+                role="menuitem"
+                @click="isMenuOpen = false"
+              >
+                Me
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'UploadCar' }"
+                class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
+                role="menuitem"
+                @click="isMenuOpen = false"
+              >
+                Upload Car
+              </router-link>
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'Gallery' }"
+                class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
+                role="menuitem"
+                @click="isMenuOpen = false"
+              >
+                Gallery
+              </router-link>
+            </li>
+          </ul>
+          <ul v-if="isLoggedIn()">
+            <li>
+              <router-link
+                :to="{ name: 'Logout' }"
+                class="block mt-4 lg:inline-block lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
+                @click="isMenuOpen = false"
+                >Logout</router-link
+              >
+            </li>
+          </ul>
+          <ul v-else>
+            <li>
+              <router-link
+                :to="{ name: 'Login' }"
+                class="block mt-4 lg:inline-block lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
+                @click="isMenuOpen = false"
+                >Login</router-link
+              >
+            </li>
+            <li>
+              <router-link
+                :to="{ name: 'Register' }"
+                class="block mt-4 lg:inline-block lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
+                >Register</router-link
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full flex-grow lg:flex lg:items-center lg:w-auto hidden">
       <div class="text-sm lg:flex-grow">
-        <router-link
-          :to="{ name: 'Home' }"
-          class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
-        >
-          Home
-        </router-link>
-        <router-link
-          :to="{ name: 'Me' }"
-          class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
-        >
-          Me
-        </router-link>
-        <router-link
-          :to="{ name: 'UploadCar' }"
-          class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
-        >
-          Upload Car
-        </router-link>
-        <router-link
-          :to="{ name: 'Gallery' }"
-          class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
-        >
-          Gallery
-        </router-link>
+        <ul v-if="!isLoggedIn()">
+          <li>
+            <router-link
+              :to="{ name: 'Home' }"
+              class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
+            >
+              Home
+            </router-link>
+          </li>
+        </ul>
+        <ul v-else class="flex gap-3 p-2">
+          <li>
+            <router-link
+              :to="{ name: 'Me' }"
+              class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
+            >
+              Me
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              :to="{ name: 'UploadCar' }"
+              class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
+            >
+              Upload Car
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              :to="{ name: 'Gallery' }"
+              class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
+            >
+              Gallery
+            </router-link>
+          </li>
+        </ul>
       </div>
       <div>
         <ul v-if="isLoggedIn()" class="flex gap-5 p-2">
@@ -66,5 +186,8 @@
 
 <script setup>
 import useAuthUser from "@/composables/UseAuthUser";
+import { ref } from "vue";
+
 const { isLoggedIn } = useAuthUser();
+const isMenuOpen = ref(false);
 </script>

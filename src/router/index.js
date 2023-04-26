@@ -64,8 +64,8 @@ const routes = [
     beforeEnter: async () => {
       const { logout } = useAuthUser();
       await logout();
-      window.location.reload();
-      return { name: "Home" };
+      alert("Logged out");
+      return { name: "Login" };
     },
   },
 ];
