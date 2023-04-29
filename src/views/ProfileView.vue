@@ -1,16 +1,16 @@
 <template>
   <div class="me">
-    <me />
+    <profile />
   </div>
 </template>
 
 <script>
-import Me from "@/components/Shared/Me.vue";
+import Profile from "@/components/Shared/Profile.vue";
 
 export default {
-  name: "MeView",
+  name: "ProfileView",
   components: {
-    Me,
+    Profile,
   },
 };
 </script>

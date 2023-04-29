@@ -45,12 +45,12 @@
           <ul v-else>
             <li>
               <router-link
-                :to="{ name: 'Me' }"
+                :to="{ name: 'Profile' }"
                 class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
                 role="menuitem"
                 @click="isMenuOpen = false"
               >
-                Me
+                My Profile
               </router-link>
             </li>
             <li>
@@ -120,10 +120,10 @@
         <ul v-else class="flex gap-3 p-2">
           <li>
             <router-link
-              :to="{ name: 'Me' }"
+              :to="{ name: 'Profile' }"
               class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
             >
-              Me
+              My Profile
             </router-link>
           </li>
           <li>

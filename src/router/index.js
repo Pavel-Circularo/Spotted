@@ -35,12 +35,12 @@ const routes = [
     component: ForgotPasswordView,
   },
   {
-    path: "/me",
-    name: "Me",
+    path: "/profile",
+    name: "Profile",
     meta: {
       requiresAuth: true,
     },
-    component: () => import("@/components/Shared/Me.vue"),
+    component: () => import("@/components/Shared/Profile.vue"),
   },
   {
     path: "/upload-car",

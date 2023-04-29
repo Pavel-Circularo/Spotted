@@ -5,27 +5,32 @@
     >
       Welcome {{ user.data.user.user_metadata.name }}
     </h2>
+    <p class="text-center text-brand-white-1 mb-8">
+      Head over to your garage to check your collection or set up your account.
+    </p>
     <div class="flex justify-center">
       <button
         class="relative w-60 h-36 bg-white text-white font-bold text-2xl rounded-lg overflow-hidden focus:outline-none mr-5"
       >
-        <div
-          class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-36"
-        >
-          <img class="w-full h-full" src="@/assets/garage1.jpg" alt="car" />
-        </div>
-        <div
-          class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-0"
-        >
-          <img
-            class="w-full h-full object-contain"
-            src="@/assets/lambo.jpg"
-            alt="garage door"
-          />
-        </div>
+        <router-link :to="{ name: 'Gallery' }">
+          <div
+            class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-36"
+          >
+            <img class="w-full h-full" src="@/assets/garage1.jpg" alt="car" />
+          </div>
+          <div
+            class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-0"
+          >
+            <img
+              class="w-full h-full object-contain"
+              src="@/assets/lambo.jpg"
+              alt="garage door"
+            />
+          </div>
+        </router-link>
       </button>
       <router-link
-        :to="{ name: 'Me' }"
+        :to="{ name: 'Profile' }"
         class="relative w-60 h-36 bg-white text-white font-bold text-2xl rounded-lg overflow-hidden focus:outline-none ml-5"
       >
         <img
