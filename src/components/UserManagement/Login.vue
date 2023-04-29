@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col items-center justify-center h-screen">
     <form
-      class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
+      class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg mb-5"
       @submit.prevent="handleLogin()"
     >
       <h1 class="text-3xl font-medium mb-5 text-center text-teal-600">Login</h1>
@@ -41,13 +41,23 @@
         </router-link>
       </div>
     </form>
-    <div class="mt-5">
+    <!-- Ready for GitHub -->
+    <!-- <div class="mt-5">
       <a
         class="text-teal-600 hover:underline"
         @click.prevent="handleLogin('github')"
       >
         Github
       </a>
+    </div> -->
+    <div>
+      <router-link
+        type="submit"
+        class="text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center mr-2"
+        to="/register"
+      >
+        Don't have an account? Register!
+      </router-link>
     </div>
   </div>
 </template>

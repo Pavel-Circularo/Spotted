@@ -8,27 +8,18 @@
     <div class="relative lg:hidden">
       <button
         id="options-menu"
-        class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md text-brand-green-1 bg-brand-white-1 hover:bg-brand-green-1 hover:text-brand-white-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-green-1"
-        :class="{ 'bg-brand-green-1 text-brand-white-1': isMenuOpen }"
+        class="inline-flex items-center px-4 py-2 text-base font-medium rounded-md text-brand-white-1 bg-brand-white-1 hover:ring-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-gradient"
+        :class="{ 'bg-brand-white-1': isMenuOpen }"
         type="button"
         aria-haspopup="true"
         aria-expanded="true"
         @click="isMenuOpen = !isMenuOpen"
       >
-        Menu
-        <svg
-          class="ml-2 -mr-0.5 h-4 w-4"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-          fill="currentColor"
-          aria-hidden="true"
-        >
-          <path
-            fill-rule="evenodd"
-            d="M10 14l-5-5h10l-5 5z"
-            clip-rule="evenodd"
-          />
-        </svg>
+        <div class="space-y-2">
+          <div class="w-8 h-0.5 bg-gray-600"></div>
+          <div class="w-8 h-0.5 bg-gray-600"></div>
+          <div class="w-8 h-0.5 bg-gray-600"></div>
+        </div>
       </button>
 
       <div
@@ -87,7 +78,7 @@
             <li>
               <router-link
                 :to="{ name: 'Logout' }"
-                class="block mt-4 lg:inline-block lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
+                class="block px-4 py-2 text-sm text-red-500 hover:bg-brand-green-1 hover:text-brand-white-1 font-bold"
                 @click="isMenuOpen = false"
                 >Logout</router-link
               >
@@ -97,7 +88,7 @@
             <li>
               <router-link
                 :to="{ name: 'Login' }"
-                class="block mt-4 lg:inline-block lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
+                class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
                 @click="isMenuOpen = false"
                 >Login</router-link
               >
@@ -105,7 +96,7 @@
             <li>
               <router-link
                 :to="{ name: 'Register' }"
-                class="block mt-4 lg:inline-block lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
+                class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
                 >Register</router-link
               >
             </li>
