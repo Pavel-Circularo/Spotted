@@ -1,13 +1,47 @@
 <template>
-  <div v-if="authenticated">
-    <p>Welcome, {{ user.data.user.email }}</p>
+  <div v-if="authenticated" class="h-screen container mx-auto px-6 p-10">
+    <h2
+      class="text-4xl flex font-bold text-center text-brand-white-1 mt-10 mb-11 md:text-4xl lg:text-6xl justify-center"
+    >
+      Welcome {{ user.data.user.user_metadata.name }}
+    </h2>
+    <div class="flex justify-center">
+      <button
+        class="relative w-60 h-36 bg-white text-white font-bold text-2xl rounded-lg overflow-hidden focus:outline-none mr-5"
+      >
+        <div
+          class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-36"
+        >
+          <img class="w-full h-full" src="@/assets/garage1.jpg" alt="car" />
+        </div>
+        <div
+          class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-0"
+        >
+          <img
+            class="w-full h-full object-contain"
+            src="@/assets/lambo.jpg"
+            alt="garage door"
+          />
+        </div>
+      </button>
+      <router-link
+        :to="{ name: 'Me' }"
+        class="relative w-60 h-36 bg-white text-white font-bold text-2xl rounded-lg overflow-hidden focus:outline-none ml-5"
+      >
+        <img
+          class="w-full h-full object-contain"
+          src="@/assets/user-profile.png"
+          alt="garage door"
+        />
+      </router-link>
+    </div>
   </div>
   <div v-else class="h-full">
     <section class="container mx-auto px-6 p-10">
       <h2
         class="text-4xl font-bold text-center text-brand-white-1 mt-10 mb-11 md:text-4xl lg:text-6xl"
       >
-        Welcome to Spotted, your own car collection
+        Welcome to Spotted, your personal car collection
       </h2>
       <div class="flex items-center flex-wrap mb-15">
         <div class="w-full md:w-1/2">
@@ -25,7 +59,7 @@
           <img src="@/assets/honda.png" alt="Car Image" />
         </div>
       </div>
-      <div class="flex items-center flex-wrap mb-15">
+      <div class="flex items-center flex-wrap mb-15 justify-center">
         <router-link
           :to="{ name: 'Register' }"
           class="lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
@@ -47,7 +81,7 @@
           </h4>
         </div>
       </div>
-      <div class="flex items-right flex-wrap mb-15">
+      <div class="flex items-right flex-wrap mb-15 justify-center">
         <router-link
           :to="{ name: 'Login' }"
           class="lg:mt-0 text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-lg px-5 py-2.5 text-center"
@@ -83,3 +117,21 @@ export default {
   },
 };
 </script>
+
+<style>
+button:hover .absolute:nth-child(1) {
+  transform: translateY(-100%);
+}
+
+button .absolute:nth-child(2) {
+  opacity: 0;
+}
+
+button:hover .absolute:nth-child(2) {
+  opacity: 1;
+}
+
+button .absolute {
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+}
+</style>

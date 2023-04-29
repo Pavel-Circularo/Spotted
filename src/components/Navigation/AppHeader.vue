@@ -70,7 +70,7 @@
                 role="menuitem"
                 @click="isMenuOpen = false"
               >
-                Gallery
+                Garage
               </router-link>
             </li>
           </ul>
@@ -139,7 +139,7 @@
               :to="{ name: 'Gallery' }"
               class="block mt-4 lg:inline-block lg:mt-0 text-brand-green-1 text-2xl hover:text-white mr-6"
             >
-              Gallery
+              Garage
             </router-link>
           </li>
         </ul>

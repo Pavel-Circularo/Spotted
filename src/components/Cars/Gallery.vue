@@ -1,6 +1,8 @@
 <template>
   <div class="container mx-auto">
-    <h1 class="text-4xl font-bold text-gray-800 my-4 text-center">Gallery</h1>
+    <h1 class="text-4xl font-bold text-brand-white-1 my-4 text-center">
+      My Garage
+    </h1>
     <div class="my-4 flex flex-col md:flex-row justify-center md:space-x-4">
       <input
         v-model="brandFilter"

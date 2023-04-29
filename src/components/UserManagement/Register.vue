@@ -16,12 +16,12 @@
         Create account
       </h1>
       <div class="mb-4">
-        <label class="block text-gray-700 font-medium mb-2" for="name">
-          Name
+        <label class="block text-gray-700 font-medium mb-2" for="username">
+          Username
         </label>
         <input
-          id="name"
-          v-model="form.name"
+          id="username"
+          v-model="form.username"
           class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
           type="text"
           required
@@ -92,9 +92,9 @@ const { register } = useAuthUser();
 
 // Form reactive ref to keep up with the form data
 const form = ref({
-  name: "",
   email: "",
   password: "",
+  username: "",
 });
 
 // function to hand the form submit
