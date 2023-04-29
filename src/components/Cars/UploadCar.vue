@@ -8,11 +8,11 @@
   </div>
   <div class="flex flex-col items-center justify-center h-screen">
     <form
-      class="bg-brand-white-1 p-6 rounded-lg shadow-md w-full max-w-lg"
+      class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
       @submit.prevent="submitForm()"
     >
       <h1 class="text-3xl font-medium mb-6 text-center text-teal-600">
-        Add a car to your collection
+        Add a car to your garage
       </h1>
       <div class="mb-4">
         <label class="block text-gray-700 font-medium mb-2" for="brand"
@@ -37,7 +37,7 @@
           v-model="form.model"
           class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
           type="text"
-          :disabled="enableModel"
+          maxlength="100"
         />
       </div>
       <div class="mb-4">
@@ -49,6 +49,7 @@
           v-model="form.color"
           class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
           type="text"
+          maxlength="20"
         />
       </div>
       <div class="mb-4">

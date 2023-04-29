@@ -6,6 +6,13 @@
     >
       <h1 class="text-3xl font-medium mb-5 text-center text-teal-600">Login</h1>
       <div class="mb-4">
+        <div
+          v-if="alert.show"
+          class="bg-white p-2 rounded-lg shadow-md w-full max-w-md mb-2 text-center"
+          :class="`${alert.type}`"
+        >
+          {{ alert.message }}
+        </div>
         <label class="block text-gray-700 font-medium mb-2" for="email">
           Email
         </label>
@@ -76,6 +83,17 @@ const form = ref({
   password: "",
 });
 
+const alert = ref({
+  show: false,
+  message: "",
+  type: "",
+});
+
+const showAlert = (message, type) => {
+  alert.value.message = message;
+  alert.value.type = type;
+  alert.value.show = true;
+};
 // call the proper login method from the AuthUser composable
 // on the submit of the form
 const handleLogin = async (provider) => {
@@ -85,7 +103,9 @@ const handleLogin = async (provider) => {
       : await login(form.value);
     router.push({ name: "Home" });
   } catch (error) {
-    alert(error.message);
+    console.log(error);
+    showAlert(error.message, "bg-red-500 text-white");
+    //alert(error.message);
   }
 };
 </script>
