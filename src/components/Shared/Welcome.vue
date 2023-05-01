@@ -3,7 +3,7 @@
     <h2
       class="text-4xl flex font-bold text-center text-brand-white-1 mt-10 mb-11 md:text-4xl lg:text-6xl justify-center"
     >
-      Welcome {{ user.data.user.user_metadata.name }}
+      Welcome {{ user.data.user.user_metadata.username }}
     </h2>
     <p class="text-center text-brand-white-1 mb-8">
       Head over to your garage to check your collection or set up your account.

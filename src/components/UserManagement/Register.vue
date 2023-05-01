@@ -1,13 +1,5 @@
-<!-- <form class="max-w-lg m-auto" @submit.prevent="handleSubmit">
-    <h1 class="text-3xl mb-5">Register</h1>
-    <label>Name <input v-model="form.name" type="text" /></label>
-    <label>Email <input v-model="form.email" type="email" /></label>
-    <label>Password <input v-model="form.password" type="password" /></label>
-    <button>Register</button>
-  </form> -->
-
 <template>
-  <div class="flex flex-col items-center justify-center h-screen">
+  <div class="flex flex-col items-center justify-center h-screen md:mx-0 mx-5">
     <form
       class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg mb-5"
       @submit.prevent="handleSubmit"
