@@ -79,18 +79,21 @@
         Already registered? Login!
       </router-link>
     </div>
+    <button @click="checkUsername">CHECK</button>
   </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import useAuthUser from "@/composables/UseAuthUser";
+import useSupabase from "@/composables/UseSupabase.js";
 import { useRouter } from "vue-router";
 
 // Use necessary composables
 const router = useRouter();
 const { register, user } = useAuthUser();
 const showPassword = ref(false);
+const { supabase } = useSupabase();
 
 // Form reactive ref to keep up with the form data
 const form = ref({
@@ -98,15 +101,32 @@ const form = ref({
   password: "",
   username: "",
 });
+
 // onMounted hook to check if user is logged in and redirect to home
 onMounted(() => {
   if (user.value) {
     router.push({ name: "Home" });
   }
 });
+
+const checkUsername = async () => {
+  const { data: users, error } = await supabase.from("users").select("*");
+  if (error) throw error;
+  console.log(users);
+};
+
 // function to hand the form submit
 const handleSubmit = async () => {
   try {
+    // check if the email already exists
+    const { data } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("username", form.value.username);
+    if (data.length) {
+      throw new Error("Name already exists.");
+    }
+
     // use the register method from the AuthUser composable
     await register(form.value);
 

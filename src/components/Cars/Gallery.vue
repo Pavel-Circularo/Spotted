@@ -40,7 +40,7 @@
           <img
             :src="item.url"
             :alt="item.brand"
-            class="w-full object-cover rounded-t-lg h-52"
+            class="w-full object-cover rounded-t-lg h-36"
             @click="enlargeImage(item.url)"
           />
           <div
