@@ -1,50 +1,61 @@
 <template>
-  <div class="container mx-auto">
-    <h1 class="text-4xl font-bold text-brand-white-1 my-4 text-center">
+  <div class="container mx-auto min-h-screen">
+    <h1
+      class="text-4xl font-bold text-brand-white-1 my-10 text-center lg:text-6xl"
+    >
       My Garage
     </h1>
-    <div class="my-4 flex flex-col md:flex-row justify-center md:space-x-4">
+    <div class="my-10 grid grid-cols-2 md:grid-cols-4 gap-2 justify-center">
       <input
         v-model="brandFilter"
         type="text"
         placeholder="Brand"
-        class="border-gray-400 border-2 rounded-lg p-2"
+        class="border-gray-400 border-2 rounded-lg p-2 md:ml-0 ml-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
       <input
         v-model="modelFilter"
         type="text"
         placeholder="Model"
-        class="border-gray-400 border-2 rounded-lg p-2"
+        class="border-gray-400 border-2 rounded-lg p-2 md:mr-0 mr-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
       <input
         v-model="yearFilter"
         type="text"
         placeholder="Year"
-        class="border-gray-400 border-2 rounded-lg p-2"
+        class="border-gray-400 border-2 rounded-lg p-2 md:ml-0 ml-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
       <input
         v-model="colorFilter"
         type="text"
         placeholder="Color"
-        class="border-gray-400 border-2 rounded-lg p-2"
+        class="border-gray-400 border-2 rounded-lg p-2 md:mr-0 mr-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
     </div>
 
-    <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+    <div
+      class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mr-10 ml-10 md:mr-0 md:ml-0"
+    >
       <div v-for="item in filteredGalleryData" :key="item.id">
-        <img
-          :src="item.url"
-          :alt="item.brand"
-          class="w-full rounded-lg shadow-lg"
-          @click="enlargeImage(item.url)"
-        />
-        <div class="bg-white rounded-lg shadow-lg p-4">
-          <h2 class="text-lg font-bold">{{ item.brand }} {{ item.model }}</h2>
-          <p class="text-gray-500">Year: {{ item.year }}</p>
-          <p class="text-gray-500">Color: {{ item.color }}</p>
+        <div class="rounded-lg shadow-lg shadow-brand-green-1">
+          <img
+            :src="item.url"
+            :alt="item.brand"
+            class="w-full object-cover rounded-t-lg h-52"
+            @click="enlargeImage(item.url)"
+          />
+          <div
+            class="bg-brand-white-1 p-4 rounded-b-lg shadow-lg shadow-brand-green-1"
+          >
+            <h2 class="text-lg font-bold text-brand-green-1">
+              {{ item.brand }} {{ item.model }}
+            </h2>
+            <p class="text-brand-grey-3">Year: {{ item.year }}</p>
+            <p class="text-brand-grey-3">Color: {{ item.color }}</p>
+          </div>
         </div>
       </div>
     </div>
+
     <div
       v-if="enlarged"
       class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
