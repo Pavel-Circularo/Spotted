@@ -10,6 +10,12 @@
       <p class="text-center mb-2">
         Input your email to receive a link to reset your password.
       </p>
+      <div
+        v-if="errAlert.show"
+        class="bg-red-500 text-white w-full p-2 rounded-lg shadow-md mb-2 text-center"
+      >
+        {{ errAlert.message }}
+      </div>
       <label class="block text-gray-700 font-medium mb-5" for="email"
         >Email
         <input
@@ -41,13 +47,27 @@ const router = useRouter();
 // keep up with email
 const email = ref("");
 
+const errAlert = ref({
+  show: false,
+  message: "",
+});
+
+const showAlert = (message) => {
+  errAlert.value.message = message;
+  errAlert.value.show = true;
+};
 // function to call on submit of the form
 // triggers sending the reset email to the user
 const handlePasswordReset = async () => {
-  await sendPasswordRestEmail(email.value);
-  alert(`Password reset email sent to: ${email.value}`);
-  router.push({
-    name: "Login",
-  });
+  try {
+    await sendPasswordRestEmail(email.value);
+    alert(`Password reset email sent to: ${email.value}`);
+    router.push({
+      name: "Login",
+    });
+  } catch (error) {
+    console.log(error);
+    showAlert(error.message, "bg-red-500 text-white w-full");
+  }
 };
 </script>

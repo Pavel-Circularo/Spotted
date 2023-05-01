@@ -75,7 +75,8 @@ export default {
     const fetchGarageData = async () => {
       let { count, error } = await supabase
         .from("cars")
-        .select("*", { count: "exact", head: true });
+        .select("*", { count: "exact", head: true })
+        .eq("user", user._rawValue.id);
 
       if (error) {
         console.error(error);
@@ -86,7 +87,10 @@ export default {
 
     //Get a string that represents the most frequent string in a column
     const fetchMostFrequent = async (columnName, resultVariable) => {
-      let { data, error } = await supabase.from("cars").select(columnName);
+      let { data, error } = await supabase
+        .from("cars")
+        .select(columnName)
+        .eq("user", user._rawValue.id);
 
       if (error) {
         console.error(error);

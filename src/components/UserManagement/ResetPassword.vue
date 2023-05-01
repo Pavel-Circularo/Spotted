@@ -63,9 +63,11 @@
 <script>
 import useAuthUser from "@/composables/UseAuthUser";
 import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 
 export default {
   setup() {
+    const router = useRouter();
     const newPassword = ref("");
     const newPasswordConfirm = ref("");
     const passwordsMatch = computed(
@@ -82,6 +84,8 @@ export default {
       await update({
         password: newPassword.value,
       });
+      alert("Password reset successfully");
+      router.push({ name: "Profile" });
     };
 
     return {

@@ -35,13 +35,22 @@
         <label class="block text-gray-700 font-medium mb-2" for="password">
           Password
         </label>
-        <input
-          id="password"
-          v-model="form.password"
-          class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
-          type="password"
-          required
-        />
+        <div class="relative">
+          <input
+            id="password"
+            v-model="form.password"
+            class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
+            :type="showPassword ? 'text' : 'password'"
+            required
+          />
+          <button
+            type="button"
+            class="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500"
+            @click="showPassword = !showPassword"
+          >
+            {{ showPassword ? "HIDE" : "SHOW" }}
+          </button>
+        </div>
       </div>
       <div class="flex items-center justify-center">
         <button
@@ -74,13 +83,14 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import useAuthUser from "@/composables/UseAuthUser";
 import { useRouter } from "vue-router";
 
 // Use necessary composables
 const router = useRouter();
-const { register } = useAuthUser();
+const { register, user } = useAuthUser();
+const showPassword = ref(false);
 
 // Form reactive ref to keep up with the form data
 const form = ref({
@@ -88,7 +98,12 @@ const form = ref({
   password: "",
   username: "",
 });
-
+// onMounted hook to check if user is logged in and redirect to home
+onMounted(() => {
+  if (user.value) {
+    router.push({ name: "Home" });
+  }
+});
 // function to hand the form submit
 const handleSubmit = async () => {
   try {

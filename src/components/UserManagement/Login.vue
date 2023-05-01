@@ -8,8 +8,7 @@
       <div class="mb-4">
         <div
           v-if="alert.show"
-          class="bg-white p-2 rounded-lg shadow-md w-full max-w-md mb-2 text-center"
-          :class="`${alert.type}`"
+          class="bg-red-500 p-2 rounded-lg shadow-md w-full mb-2 text-center text-white"
         >
           {{ alert.message }}
         </div>
@@ -28,13 +27,22 @@
         <label class="block text-gray-700 font-medium mb-2" for="password">
           Password
         </label>
-        <input
-          id="password"
-          v-model="form.password"
-          class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
-          type="password"
-          required
-        />
+        <div class="relative">
+          <input
+            id="password"
+            v-model="form.password"
+            :type="showPassword ? 'text' : 'password'"
+            class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
+            required
+          />
+          <button
+            type="button"
+            class="absolute top-1/2 right-2 transform -translate-y-1/2 text-gray-500"
+            @click="showPassword = !showPassword"
+          >
+            {{ showPassword ? "HIDE" : "SHOW" }}
+          </button>
+        </div>
       </div>
       <div class="flex items-center justify-between">
         <button
@@ -76,6 +84,7 @@ import { useRouter } from "vue-router";
 // Use necessary composables
 const router = useRouter();
 const { login, loginWithSocialProvider } = useAuthUser();
+const showPassword = ref(false);
 
 // keep up with form data
 const form = ref({
@@ -86,14 +95,13 @@ const form = ref({
 const alert = ref({
   show: false,
   message: "",
-  type: "",
 });
 
-const showAlert = (message, type) => {
+const showAlert = (message) => {
   alert.value.message = message;
-  alert.value.type = type;
   alert.value.show = true;
 };
+
 // call the proper login method from the AuthUser composable
 // on the submit of the form
 const handleLogin = async (provider) => {
@@ -104,7 +112,7 @@ const handleLogin = async (provider) => {
     router.push({ name: "Home" });
   } catch (error) {
     console.log(error);
-    showAlert(error.message, "bg-red-500 text-white");
+    showAlert(error.message);
   }
 };
 </script>
