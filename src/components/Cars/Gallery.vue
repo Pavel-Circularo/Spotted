@@ -30,6 +30,12 @@
         placeholder="Color"
         class="border-gray-400 border-2 rounded-lg p-2 md:mr-0 mr-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
+      <button
+        class="bg-brand-green-1 text-white py-2 px-4 rounded-lg shadow-brand-green-1 hover:bg-brand-green-2"
+        @click="searchGalleryData"
+      >
+        Search
+      </button>
     </div>
 
     <div
@@ -87,17 +93,46 @@ export default {
     const yearFilter = ref("");
     const colorFilter = ref("");
 
+    const currentPage = ref(1);
+    const pageSize = 20;
+
+    const searchGalleryData = async () => {
+      galleryData.value = [];
+      currentPage.value = 1;
+      await fetchGalleryData();
+    };
+
+    // Fetch gallery data from Supabase based on user and filter criteria
     const fetchGalleryData = async () => {
-      let { data: cars, error } = await supabase
+      let query = supabase
         .from("cars")
         .select("*")
-        .eq("user", user._rawValue.id)
-        .order("created_at", { ascending: false });
+        .eq("user", user._rawValue.id);
+
+      if (brandFilter.value !== "") {
+        query = query.ilike("brand", `%${brandFilter.value}%`);
+      }
+      if (modelFilter.value !== "") {
+        query = query.ilike("model", `%${modelFilter.value}%`);
+      }
+      if (yearFilter.value !== "") {
+        query = query.eq("year", yearFilter.value);
+      }
+      if (colorFilter.value !== "") {
+        query = query.ilike("color", `%${colorFilter.value}%`);
+      }
+
+      let { data: cars, error } = await query
+        .order("created_at", { ascending: false })
+        .range(
+          (currentPage.value - 1) * pageSize,
+          currentPage.value * pageSize - 1
+        );
 
       if (error) {
         console.error(error);
       } else {
-        galleryData.value = cars;
+        galleryData.value = galleryData.value.concat(cars);
       }
     };
 
@@ -106,19 +141,27 @@ export default {
     };
 
     const filteredGalleryData = computed(() => {
-      return galleryData.value.filter((item) => {
-        return (
-          item.brand.toLowerCase().includes(brandFilter.value.toLowerCase()) &&
-          item.model.toLowerCase().includes(modelFilter.value.toLowerCase()) &&
-          item.year.toString().includes(yearFilter.value) &&
-          item.color.toLowerCase().includes(colorFilter.value.toLowerCase())
-        );
-      });
+      return galleryData.value;
     });
+
+    //The handleScroll function is called whenever the user scrolls the window.
+    //It checks if the user has scrolled to the bottom of the page and if so,
+    //increments the currentPage variable and calls the fetchGalleryData function again to load the next page of data.
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >= document.body.offsetHeight &&
+        galleryData.value.length % pageSize === 0
+      ) {
+        currentPage.value++;
+        fetchGalleryData();
+      }
+    };
 
     onMounted(async () => {
       await fetchGalleryData();
+      window.addEventListener("scroll", handleScroll);
     });
+
     return {
       galleryData,
       brandFilter,
@@ -126,6 +169,7 @@ export default {
       yearFilter,
       colorFilter,
       filteredGalleryData,
+      searchGalleryData,
       enlargeImage,
       enlarged,
     };

@@ -37,7 +37,7 @@
           v-model="form.model"
           class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
           type="text"
-          maxlength="100"
+          maxlength="20"
         />
       </div>
       <div class="mb-4">
@@ -210,12 +210,13 @@ export default {
         const response = await supabase.from("cars").insert(formData);
         let statusCode = response.status;
         if (statusCode == 201) {
-          this.form.brand = "";
+          /* this.form.brand = "";
           this.form.model = "";
           this.form.color = "";
           this.form.year = null;
-          this.fileInput = null;
+          this.fileInput = null; */
           this.showAlert("Upload successful", "bg-green-500 text-white");
+          this.resetForm();
         } else {
           this.showAlert("Upload failed", "bg-red-500 text-white");
           console.log(response.error);
