@@ -97,6 +97,7 @@
               <router-link
                 :to="{ name: 'Register' }"
                 class="block px-4 py-2 text-sm text-brand-green-1 hover:bg-brand-green-1 hover:text-brand-white-1"
+                @click="isMenuOpen = false"
                 >Register</router-link
               >
             </li>

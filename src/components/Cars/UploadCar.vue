@@ -6,7 +6,7 @@
   >
     {{ alert.message }}
   </div>
-  <div class="flex flex-col items-center justify-center h-screen">
+  <div class="flex flex-col items-center justify-center h-screen md:mx-0 mx-5">
     <form
       class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
       @submit.prevent="submitForm()"
