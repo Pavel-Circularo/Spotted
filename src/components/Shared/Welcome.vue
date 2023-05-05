@@ -3,7 +3,8 @@
     <h2
       class="text-4xl flex font-bold text-center text-brand-white-1 mt-10 mb-11 md:text-4xl lg:text-6xl justify-center"
     >
-      Welcome {{ user.data.user.user_metadata.username }}
+      Welcome
+      {{ user.user_metadata.username }}
     </h2>
     <p class="text-center text-brand-white-1 mb-8">
       Head over to your garage to check your collection or set up your account.
@@ -97,30 +98,20 @@
   </div>
 </template>
 
-<script>
-import { createClient } from "@supabase/supabase-js";
+<script setup>
+import useAuthUser from "@/composables/UseAuthUser";
+import { onMounted, ref } from "vue";
 
-export default {
-  name: "Welcome",
-  data() {
-    return {
-      authenticated: false,
-      user: {},
-    };
-  },
-  created() {
-    const supabase = createClient(
-      process.env.VUE_APP_SUPABASE_URL,
-      process.env.VUE_APP_SUPABASE_ANON_KEY
-    );
-    supabase.auth.getUser().then((user) => {
-      if (user) {
-        this.authenticated = true;
-        this.user = user;
-      }
-    });
-  },
-};
+const { isLoggedIn } = useAuthUser();
+const { user } = useAuthUser();
+
+const authenticated = ref(false);
+
+onMounted(() => {
+  if (isLoggedIn()) {
+    authenticated.value = true;
+  }
+});
 </script>
 
 <style>
