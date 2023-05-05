@@ -8,6 +8,14 @@
         Create account
       </h1>
       <div class="mb-4">
+        <transition name="tada">
+          <div
+            v-if="alert.show"
+            class="bg-red-500 p-2 rounded-lg shadow-md w-full mb-2 text-center text-white"
+          >
+            {{ alert.message }}
+          </div>
+        </transition>
         <label class="block text-gray-700 font-medium mb-2" for="username">
           Username
         </label>
@@ -17,6 +25,9 @@
           class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
           type="text"
           required
+          minlength="3"
+          @blur="handleUsernameBlur"
+          @input="handleUsernameInput"
         />
       </div>
       <div class="mb-4">
@@ -79,7 +90,6 @@
         Already registered? Login!
       </router-link>
     </div>
-    <button @click="checkUsername">CHECK</button>
   </div>
 </template>
 
@@ -94,6 +104,7 @@ const router = useRouter();
 const { register, user } = useAuthUser();
 const showPassword = ref(false);
 const { supabase } = useSupabase();
+//const error = ref("");
 
 // Form reactive ref to keep up with the form data
 const form = ref({
@@ -102,6 +113,16 @@ const form = ref({
   username: "",
 });
 
+const alert = ref({
+  show: false,
+  message: "",
+});
+
+const showAlert = (message) => {
+  alert.value.message = message;
+  alert.value.show = true;
+};
+
 // onMounted hook to check if user is logged in and redirect to home
 onMounted(() => {
   if (user.value) {
@@ -109,10 +130,24 @@ onMounted(() => {
   }
 });
 
-const checkUsername = async () => {
-  const { data: users, error } = await supabase.from("users").select("*");
-  if (error) throw error;
-  console.log(users);
+// check if the username already exists
+const handleUsernameBlur = async () => {
+  try {
+    const { data } = await supabase
+      .from("profiles")
+      .select("username")
+      .eq("username", form.value.username);
+    if (data.length) {
+      showAlert("Username already exists.");
+    }
+  } catch (error) {
+    alert(error.message);
+  }
+};
+
+// reset the error when the user types
+const handleUsernameInput = () => {
+  alert.value.show = false;
 };
 
 // function to hand the form submit
@@ -124,7 +159,7 @@ const handleSubmit = async () => {
       .select("username")
       .eq("username", form.value.username);
     if (data.length) {
-      throw new Error("Name already exists.");
+      return;
     }
 
     // use the register method from the AuthUser composable
@@ -141,3 +176,32 @@ const handleSubmit = async () => {
   }
 };
 </script>
+<style>
+.tada-enter-active {
+  animation: tada 0.8s;
+}
+
+@keyframes tada {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  10%,
+  20% {
+    transform: scale3d(0.9, 0.9, 0.9) rotate3d(0, 0, 1, -3deg);
+  }
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 3deg);
+  }
+  40%,
+  60%,
+  80% {
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -3deg);
+  }
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}
+</style>

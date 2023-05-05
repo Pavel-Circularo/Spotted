@@ -5,37 +5,45 @@
     >
       My Garage
     </h1>
-    <div class="my-10 grid grid-cols-2 md:grid-cols-4 gap-2 justify-center">
+    <div class="my-10 flex flex-wrap justify-center items-center gap-4 mx-5">
       <input
         v-model="brandFilter"
         type="text"
         placeholder="Brand"
-        class="border-gray-400 border-2 rounded-lg p-2 md:ml-0 ml-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
       <input
         v-model="modelFilter"
         type="text"
         placeholder="Model"
-        class="border-gray-400 border-2 rounded-lg p-2 md:mr-0 mr-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
       <input
         v-model="yearFilter"
         type="text"
         placeholder="Year"
-        class="border-gray-400 border-2 rounded-lg p-2 md:ml-0 ml-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
       <input
         v-model="colorFilter"
         type="text"
         placeholder="Color"
-        class="border-gray-400 border-2 rounded-lg p-2 md:mr-0 mr-10 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
       />
-      <button
-        class="bg-brand-green-1 text-white py-2 px-4 rounded-lg shadow-brand-green-1 hover:bg-brand-green-2"
-        @click="searchGalleryData"
-      >
-        Search
-      </button>
+      <div class="my-5 flex flex-wrap justify-center items-center gap-4 mx-5">
+        <button
+          class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
+          @click="searchGalleryData"
+        >
+          Search
+        </button>
+        <button
+          class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
+          @click="resetFilters"
+        >
+          Reset Filters
+        </button>
+      </div>
     </div>
 
     <div
@@ -136,6 +144,14 @@ export default {
       }
     };
 
+    const resetFilters = async () => {
+      brandFilter.value = "";
+      modelFilter.value = "";
+      yearFilter.value = "";
+      colorFilter.value = "";
+      searchGalleryData();
+    };
+
     const enlargeImage = (url) => {
       enlarged.value = url;
     };
@@ -170,6 +186,7 @@ export default {
       colorFilter,
       filteredGalleryData,
       searchGalleryData,
+      resetFilters,
       enlargeImage,
       enlarged,
     };
