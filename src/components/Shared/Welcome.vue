@@ -1,5 +1,5 @@
 <template>
-  <div v-if="authenticated" class="h-screen container mx-auto px-6 p-10">
+  <div v-if="authenticated" class="container mx-auto px-6 p-10">
     <h2
       class="text-4xl flex font-bold text-center text-brand-white-1 mt-10 mb-11 md:text-4xl lg:text-6xl justify-center"
     >
@@ -42,7 +42,7 @@
       </router-link>
     </div>
   </div>
-  <div v-else class="h-full">
+  <div v-else class="">
     <section class="container mx-auto px-6 p-10">
       <h2
         class="text-4xl font-bold text-center text-brand-white-1 mt-10 mb-11 md:text-4xl lg:text-6xl"

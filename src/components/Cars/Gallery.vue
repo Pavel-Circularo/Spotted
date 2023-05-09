@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto min-h-screen">
+  <div class="container mx-auto">
     <h1
       class="text-4xl font-bold text-brand-white-1 my-10 text-center lg:text-6xl"
     >
@@ -47,7 +47,7 @@
     </div>
 
     <div
-      class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mr-10 ml-10 md:mr-0 md:ml-0"
+      class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mr-10 ml-10 md:mr-0 md:ml-0 mb-10"
     >
       <div v-for="item in filteredGalleryData" :key="item.id">
         <div class="rounded-lg shadow-lg shadow-brand-green-1">

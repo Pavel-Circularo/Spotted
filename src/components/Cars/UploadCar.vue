@@ -6,7 +6,7 @@
   >
     {{ alert.message }}
   </div>
-  <div class="flex flex-col items-center justify-center h-screen md:mx-0 mx-5">
+  <div class="flex flex-col items-center justify-center my-14 md:mx-0 mx-5">
     <form
       class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
       @submit.prevent="submitForm()"
@@ -210,11 +210,6 @@ export default {
         const response = await supabase.from("cars").insert(formData);
         let statusCode = response.status;
         if (statusCode == 201) {
-          /* this.form.brand = "";
-          this.form.model = "";
-          this.form.color = "";
-          this.form.year = null;
-          this.fileInput = null; */
           this.showAlert("Upload successful", "bg-green-500 text-white");
           this.resetForm();
         } else {

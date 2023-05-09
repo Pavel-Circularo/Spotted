@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col items-center justify-center h-screen md:mx-0 mx-5">
+  <div class="flex flex-col items-center justify-center my-36 md:mx-0 mx-5">
     <form
       class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg mb-5"
       @submit.prevent="handleLogin()"
