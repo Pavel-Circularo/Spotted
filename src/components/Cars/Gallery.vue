@@ -107,7 +107,24 @@
       </div>
     </GDialog>
 
-    <div
+    <GDialog v-model="enlarged" max-width="90%" max-height="90%">
+      <div
+        class="wrapper fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
+      >
+        <img
+          :src="enlarged"
+          class="max-h-screen max-w-screen rounded-lg shadow-lg"
+        />
+        <button
+          class="absolute top-5 right-5 text-white rounded-full p-2"
+          @click="enlarged = false"
+        >
+          X
+        </button>
+      </div>
+    </GDialog>
+
+    <!-- <div
       v-if="enlarged"
       class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
     >
@@ -116,7 +133,7 @@
         class="max-h-screen max-w-screen rounded-lg shadow-lg"
         @click="enlarged = null"
       />
-    </div>
+    </div> -->
   </div>
 </template>
 
