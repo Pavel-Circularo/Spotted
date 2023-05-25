@@ -65,10 +65,47 @@
             </h2>
             <p class="text-brand-grey-3">Year: {{ item.year }}</p>
             <p class="text-brand-grey-3">Color: {{ item.color }}</p>
+            <div class="mt-3 flex justify-center">
+              <button
+                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center"
+                @click="passCarId(item.id)"
+              >
+                Delete
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Confirm modal -->
+    <GDialog v-model="dialogState" max-width="500">
+      <div class="wrapper text-black">
+        <div class="content p-5">
+          <div class="title text-2xl font-bold mb-5">Are you sure?</div>
+
+          <p>Please note that this action is irreversible!</p>
+        </div>
+
+        <div class="actions flex justify-center pb-5">
+          <button
+            class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center mr-2"
+            @click="
+              deleteCar();
+              dialogState = false;
+            "
+          >
+            Delete
+          </button>
+          <button
+            class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center ml-2"
+            @click="dialogState = false"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    </GDialog>
 
     <div
       v-if="enlarged"
@@ -103,6 +140,9 @@ export default {
 
     const currentPage = ref(1);
     const pageSize = 20;
+
+    const dialogState = ref(false);
+    const carIdToDelete = ref(null);
 
     const searchGalleryData = async () => {
       galleryData.value = [];
@@ -141,6 +181,30 @@ export default {
         console.error(error);
       } else {
         galleryData.value = galleryData.value.concat(cars);
+      }
+    };
+
+    const passCarId = (id) => {
+      carIdToDelete.value = id;
+      dialogState.value = true;
+    };
+
+    const deleteCar = async () => {
+      const id = carIdToDelete.value;
+      try {
+        const { data, error } = await supabase
+          .from("cars")
+          .delete()
+          .eq("id", id);
+
+        if (error) {
+          console.error("Error deleting image:", error);
+          return;
+        }
+        console.log("Deleted image:", data);
+        searchGalleryData();
+      } catch (error) {
+        console.error("Error deleting image:", error);
       }
     };
 
@@ -184,11 +248,15 @@ export default {
       modelFilter,
       yearFilter,
       colorFilter,
+      carIdToDelete,
       filteredGalleryData,
       searchGalleryData,
+      passCarId,
+      deleteCar,
       resetFilters,
       enlargeImage,
       enlarged,
+      dialogState,
     };
   },
 };

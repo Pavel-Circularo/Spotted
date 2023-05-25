@@ -12,6 +12,7 @@
     "@supabase/supabase-js": "^2.2.3",
     "autoprefixer": "^10",
     "core-js": "^3.8.3",
+    "gitart-vue-dialog": "^3.0.2",
     "js-cookie": "^3.0.1",
     "postcss": "^8",
     "tailwindcss": "^3",
