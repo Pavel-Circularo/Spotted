@@ -192,19 +192,20 @@ export default {
     const deleteCar = async () => {
       const id = carIdToDelete.value;
       try {
-        const { data, error } = await supabase
-          .from("cars")
-          .delete()
-          .eq("id", id);
+        const { error } = await supabase.from("cars").delete().eq("id", id);
 
         if (error) {
           console.error("Error deleting image:", error);
+          alert("Error deleting image. Please try again.");
           return;
         }
-        console.log("Deleted image:", data);
+
+        console.log("Deleted image:");
+        alert("Image deleted successfully!");
         searchGalleryData();
       } catch (error) {
         console.error("Error deleting image:", error);
+        alert("An error occurred while deleting the image. Please try again.");
       }
     };
 
