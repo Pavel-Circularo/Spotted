@@ -53,6 +53,7 @@
             class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
             :type="showPassword ? 'text' : 'password'"
             required
+            minlength="6"
           />
           <button
             type="button"
@@ -172,7 +173,7 @@ const handleSubmit = async () => {
       query: { email: form.value.email },
     });
   } catch (error) {
-    alert(error.message);
+    showAlert(error.message);
   }
 };
 </script>
