@@ -6,39 +6,28 @@
       Welcome
       {{ user.user_metadata.username }}
     </h2>
-    <p class="text-center text-brand-white-1 mb-8">
-      Head over to your garage to check your collection or set up your account.
+    <p class="text-center text-lg text-brand-white-1 mb-8">
+      Head over to your garage to check your collection, set up your account or
+      upload a new car.
     </p>
-    <div class="flex justify-center">
-      <button
-        class="relative w-60 h-36 bg-white text-white font-bold text-2xl rounded-lg overflow-hidden focus:outline-none mr-5"
+    <div class="flex flex-wrap justify-center">
+      <router-link
+        :to="{ name: 'Gallery' }"
+        class="mt-3 text-3xl text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg px-5 py-2.5 text-center mr-2"
       >
-        <router-link :to="{ name: 'Gallery' }">
-          <div
-            class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-36"
-          >
-            <img class="w-full h-full" src="@/assets/garage1.jpg" alt="car" />
-          </div>
-          <div
-            class="absolute inset-0 flex items-center justify-center transition-all duration-500 ease-in-out transform hover:translate-y-0"
-          >
-            <img
-              class="w-full h-full object-contain"
-              src="@/assets/lambo.jpg"
-              alt="garage door"
-            />
-          </div>
-        </router-link>
-      </button>
+        Garage
+      </router-link>
       <router-link
         :to="{ name: 'Profile' }"
-        class="relative w-60 h-36 bg-white text-white font-bold text-2xl rounded-lg overflow-hidden focus:outline-none ml-5"
+        class="mt-3 text-3xl text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg px-5 py-2.5 text-center mr-2"
       >
-        <img
-          class="w-full h-full object-contain"
-          src="@/assets/user-profile.png"
-          alt="garage door"
-        />
+        Profile
+      </router-link>
+      <router-link
+        :to="{ name: 'UploadCar' }"
+        class="mt-3 text-3xl text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg px-5 py-2.5 text-center mr-2"
+      >
+        Upload
       </router-link>
     </div>
   </div>
@@ -113,21 +102,3 @@ onMounted(() => {
   }
 });
 </script>
-
-<style>
-button:hover .absolute:nth-child(1) {
-  transform: translateY(-100%);
-}
-
-button .absolute:nth-child(2) {
-  opacity: 0;
-}
-
-button:hover .absolute:nth-child(2) {
-  opacity: 1;
-}
-
-button .absolute {
-  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
-}
-</style>

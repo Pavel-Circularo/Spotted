@@ -46,7 +46,16 @@
       </div>
     </div>
 
+    <div v-if="filteredGalleryData.length == 0">
+      <h1
+        class="text-2xl font-bold text-brand-white-1 my-10 text-center lg:text-6xl"
+      >
+        No cars found
+      </h1>
+    </div>
+
     <div
+      v-else
       class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 mr-10 ml-10 md:mr-0 md:ml-0 mb-10"
     >
       <div v-for="item in filteredGalleryData" :key="item.id">
