@@ -5,46 +5,77 @@
     >
       My Garage
     </h1>
-    <div class="my-10 flex flex-wrap justify-center items-center gap-4 mx-5">
-      <input
-        v-model="brandFilter"
-        type="text"
-        placeholder="Brand"
-        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-      />
-      <input
-        v-model="modelFilter"
-        type="text"
-        placeholder="Model"
-        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-      />
-      <input
-        v-model="yearFilter"
-        type="text"
-        placeholder="Year"
-        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-      />
-      <input
-        v-model="colorFilter"
-        type="text"
-        placeholder="Color"
-        class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-      />
-      <div class="my-5 flex flex-wrap justify-center items-center gap-4 mx-5">
+    <div class="flex flex-wrap justify-center gap-2 mx-5 my-10">
+      <div class="relative flex-grow">
+        <input
+          v-model="basicSearch"
+          type="text"
+          placeholder="Search for a car"
+          class="w-full border-gray-400 border-2 rounded-3xl p-2 pl-6 shadow-brand-green-1 shadow-md bg-brand-white-1 focus:ring-2 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium text-md"
+        />
         <button
-          class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
-          @click="searchGalleryData"
+          type="button"
+          class="h-full p-2 absolute top-1/2 right-2 transform -translate-y-1/2 border-l-2 border-gray-400 text-gray font-medium text-gray-600 hover:text-teal-400"
+          @click="showFilters = true"
         >
-          Search
-        </button>
-        <button
-          class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
-          @click="resetFilters"
-        >
-          Reset Filters
+          Advanced
         </button>
       </div>
+
+      <button
+        class="ml-2 shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-3xl text-md px-6 py-2.5"
+        @click="searchGalleryData"
+      >
+        Search
+      </button>
+      <button
+        class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center"
+        @click="resetFilters"
+      >
+        Reset Filters
+      </button>
     </div>
+
+    <!-- Advanced search modal -->
+    <GDialog v-model="showFilters" max-width="500">
+      <div class="my-10 flex flex-wrap justify-center items-center gap-4 mx-5">
+        <input
+          v-model="brandFilter"
+          type="text"
+          placeholder="Brand"
+          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        />
+        <input
+          v-model="modelFilter"
+          type="text"
+          placeholder="Model"
+          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        />
+        <input
+          v-model="yearFilter"
+          type="text"
+          placeholder="Year"
+          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        />
+        <input
+          v-model="colorFilter"
+          type="text"
+          placeholder="Color"
+          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+        />
+        <div class="my-2 flex flex-wrap justify-center items-center gap-4 mx-5">
+          <button
+            class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
+            @click="
+              searchGalleryData();
+              showFilters = false;
+            "
+          >
+            Search
+          </button>
+        </div>
+      </div>
+    </GDialog>
 
     <div v-if="filteredGalleryData.length == 0">
       <h1
@@ -64,7 +95,10 @@
             :src="item.url"
             :alt="item.brand"
             class="w-full object-cover rounded-t-lg h-36"
-            @click="enlargeImage(item.url)"
+            @click="
+              enlargeImage(item.url);
+              bigPicture = true;
+            "
           />
           <div
             class="bg-brand-white-1 p-4 rounded-b-lg shadow-lg shadow-brand-green-1"
@@ -116,7 +150,7 @@
       </div>
     </GDialog>
 
-    <GDialog v-model="enlarged" max-width="90%" max-height="90%">
+    <GDialog v-model="bigPicture" max-width="90%" max-height="90%">
       <div
         class="wrapper fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
       >
@@ -126,23 +160,12 @@
         />
         <button
           class="absolute top-5 right-5 text-white rounded-full p-2"
-          @click="enlarged = false"
+          @click="bigPicture = false"
         >
           X
         </button>
       </div>
     </GDialog>
-
-    <!-- <div
-      v-if="enlarged"
-      class="fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
-    >
-      <img
-        :src="enlarged"
-        class="max-h-screen max-w-screen rounded-lg shadow-lg"
-        @click="enlarged = null"
-      />
-    </div> -->
   </div>
 </template>
 
@@ -154,11 +177,13 @@ import useAuthUser from "@/composables/UseAuthUser.js";
 export default {
   name: "Gallery",
   setup() {
+    // Gallery data + auth user
     const galleryData = ref([]);
     const { user } = useAuthUser();
     const { supabase } = useSupabase();
-    const enlarged = ref(null);
 
+    // Search and filter variables
+    const basicSearch = ref("");
     const brandFilter = ref("");
     const modelFilter = ref("");
     const yearFilter = ref("");
@@ -167,7 +192,12 @@ export default {
     const currentPage = ref(1);
     const pageSize = 20;
 
+    // Modal variables
     const dialogState = ref(false);
+    const bigPicture = ref(false);
+    const showFilters = ref(false);
+
+    const enlarged = ref(null);
     const carIdToDelete = ref(null);
 
     const searchGalleryData = async () => {
@@ -176,13 +206,16 @@ export default {
       await fetchGalleryData();
     };
 
-    // Fetch gallery data from Supabase based on user and filter criteria
+    // Fetch gallery data from Supabase based on user and search/filter criteria
     const fetchGalleryData = async () => {
       let query = supabase
         .from("cars")
         .select("*")
         .eq("user", user._rawValue.id);
 
+      if (basicSearch.value !== "") {
+        query = query.textSearch("brand_model", `${basicSearch.value}`);
+      }
       if (brandFilter.value !== "") {
         query = query.ilike("brand", `%${brandFilter.value}%`);
       }
@@ -236,6 +269,7 @@ export default {
     };
 
     const resetFilters = async () => {
+      basicSearch.value = "";
       brandFilter.value = "";
       modelFilter.value = "";
       yearFilter.value = "";
@@ -271,6 +305,7 @@ export default {
 
     return {
       galleryData,
+      basicSearch,
       brandFilter,
       modelFilter,
       yearFilter,
@@ -283,7 +318,9 @@ export default {
       resetFilters,
       enlargeImage,
       enlarged,
+      bigPicture,
       dialogState,
+      showFilters,
     };
   },
 };
@@ -314,10 +351,5 @@ export default {
   .max-w-sm {
     max-width: calc((100% - 10rem) / 4);
   }
-}
-
-h1.text-gray-800 {
-  font-size: 2.5rem;
-  color: #35495e;
 }
 </style>
