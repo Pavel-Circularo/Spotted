@@ -173,12 +173,14 @@ export default {
       }
       if (!this.form.model.trim()) {
         errors.push("Model is required");
-      } else if (!/^[a-zA-Z ]+$/.test(this.form.model)) {
-        errors.push("Model can only contain letters and spaces");
+      } else if (!/^[a-zA-Z0-9 .-]+$/.test(this.form.model)) {
+        errors.push(
+          "Model can only contain letters, numbers, dots, and hyphens"
+        );
       }
       if (!this.form.color.trim()) {
         errors.push("Color is required");
-      } else if (!/^[a-zA-Z ]+$/.test(this.form.color)) {
+      } else if (!/^[a-zA-Z0-9 ]+$/.test(this.form.color)) {
         errors.push("Color can only contain letters and spaces");
       }
       if (
