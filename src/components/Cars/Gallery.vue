@@ -37,42 +37,46 @@
     </div>
 
     <!-- Advanced search modal -->
-    <GDialog v-model="showFilters" max-width="500">
-      <div class="my-10 flex flex-wrap justify-center items-center gap-4 mx-5">
-        <input
-          v-model="brandFilter"
-          type="text"
-          placeholder="Brand"
-          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-        />
-        <input
-          v-model="modelFilter"
-          type="text"
-          placeholder="Model"
-          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-        />
-        <input
-          v-model="yearFilter"
-          type="text"
-          placeholder="Year"
-          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-        />
-        <input
-          v-model="colorFilter"
-          type="text"
-          placeholder="Color"
-          class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-        />
-        <div class="my-2 flex flex-wrap justify-center items-center gap-4 mx-5">
-          <button
-            class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
-            @click="
-              searchGalleryData();
-              showFilters = false;
-            "
+    <GDialog v-model="showFilters" max-width="300">
+      <div class="my-10 flex items-center justify-center gap-4 mx-5">
+        <div class="flex flex-col gap-4">
+          <input
+            v-model="brandFilter"
+            type="text"
+            placeholder="Brand"
+            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+          />
+          <input
+            v-model="modelFilter"
+            type="text"
+            placeholder="Model"
+            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+          />
+          <input
+            v-model="yearFilter"
+            type="text"
+            placeholder="Year"
+            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+          />
+          <input
+            v-model="colorFilter"
+            type="text"
+            placeholder="Color"
+            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
+          />
+          <div
+            class="mt-2 flex flex-wrap justify-center items-center gap-4 mx-5"
           >
-            Search
-          </button>
+            <button
+              class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
+              @click="
+                searchGalleryData();
+                showFilters = false;
+              "
+            >
+              Search
+            </button>
+          </div>
         </div>
       </div>
     </GDialog>
@@ -110,7 +114,7 @@
             <p class="text-brand-grey-3">Color: {{ item.color }}</p>
             <div class="mt-3 flex justify-center">
               <button
-                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center"
+                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-3xl"
                 @click="passCarId(item.id)"
               >
                 Delete

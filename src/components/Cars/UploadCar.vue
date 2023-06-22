@@ -171,9 +171,10 @@ export default {
       if (!this.form.brand.trim()) {
         errors.push("Brand is required");
       }
-      if (!this.form.model.trim()) {
-        errors.push("Model is required");
-      } else if (!/^[a-zA-Z0-9 .-]+$/.test(this.form.model)) {
+      if (
+        this.form.model !== "" &&
+        !/^[a-zA-Z0-9 .-]+$/.test(this.form.model)
+      ) {
         errors.push(
           "Model can only contain letters, numbers, dots, and hyphens"
         );
@@ -184,9 +185,10 @@ export default {
         errors.push("Color can only contain letters and spaces");
       }
       if (
-        !this.form.year ||
-        this.form.year < 1900 ||
-        this.form.year > new Date().getFullYear()
+        this.form.year !== null &&
+        (isNaN(this.form.year) ||
+          this.form.year < 1900 ||
+          this.form.year > new Date().getFullYear())
       ) {
         errors.push("Year must be a number between 1900 and the current year");
       }
