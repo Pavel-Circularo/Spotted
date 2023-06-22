@@ -107,12 +107,14 @@ export default {
   data() {
     return {
       brands: [],
+      user: "",
+      generatedPath: "",
       form: {
         brand: "",
         model: "",
         color: "",
         year: null,
-        url: "https://izptjbyyibydlsfuaujz.supabase.co/storage/v1/object/public/images/",
+        url: `https://izptjbyyibydlsfuaujz.supabase.co/storage/v1/object/public/images/`,
       },
       fileInput: null,
       alert: {
@@ -132,7 +134,6 @@ export default {
   },
   async beforeMount() {
     const { supabase } = useSupabase();
-
     let { data: carmakers, error } = await supabase
       .from("car-makers")
       .select("maker");
@@ -141,6 +142,9 @@ export default {
     } else {
       this.brands = carmakers;
     }
+    this.user = useAuthUser();
+    this.generatedPath = this.user.user.id + "/" + uuidv4();
+    this.form.url += this.generatedPath;
   },
   mounted() {
     this.fileInput = document.querySelector("input[type=file]");
@@ -148,13 +152,13 @@ export default {
   methods: {
     async uploadImage() {
       const file = this.fileInput.files[0];
-      const { user } = useAuthUser();
+      //const { user } = useAuthUser();
       const { supabase } = useSupabase();
 
+      // eslint-disable-next-line no-unused-vars
       const response = await supabase.storage
         .from("images")
-        .upload(user._rawValue.id + "/" + uuidv4(), file);
-      this.form.url = this.form.url + response.data.path;
+        .upload(this.generatedPath, file);
     },
     showAlert(message, type) {
       this.alert.message = message;
