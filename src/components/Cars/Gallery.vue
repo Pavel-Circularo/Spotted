@@ -100,7 +100,14 @@
             :alt="item.brand"
             class="w-full object-cover rounded-t-lg h-36"
             @click="
-              enlargeImage(item.url);
+              enlargeImage(
+                item.id,
+                item.brand,
+                item.model,
+                item.year,
+                item.color,
+                item.url
+              );
               bigPicture = true;
             "
           />
@@ -112,14 +119,6 @@
             </h2>
             <p class="text-brand-grey-3">Year: {{ item.year }}</p>
             <p class="text-brand-grey-3">Color: {{ item.color }}</p>
-            <div class="mt-3 flex justify-center">
-              <button
-                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-3xl"
-                @click="passCarId(item.id)"
-              >
-                Delete
-              </button>
-            </div>
           </div>
         </div>
       </div>
@@ -156,18 +155,55 @@
 
     <GDialog v-model="bigPicture" max-width="90%" max-height="90%">
       <div
-        class="wrapper fixed inset-0 bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
+        class="wrapper fixed inset-0 sm:bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
       >
-        <img
-          :src="enlarged"
-          class="max-h-screen max-w-screen rounded-lg shadow-lg"
-        />
-        <button
-          class="absolute top-5 right-5 text-white rounded-full p-2"
-          @click="bigPicture = false"
-        >
-          X
-        </button>
+        <div class="relative">
+          <img
+            :src="picData.url"
+            class="max-h-screen max-w-screen rounded-lg shadow-lg"
+          />
+          <button
+            class="absolute top-5 right-5 text-white shadow-brand-green-1 shadow-md bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 text-center text-sm font-medium py-1 px-2 rounded-full"
+            @click="bigPicture = false"
+          >
+            X
+          </button>
+          <div
+            class="mt-3 absolute bottom-2 left-0 right-0 flex justify-center"
+          >
+            <div
+              class="max-w-xl w-full bg-brand-white-1 p-4 rounded-lg shadow-lg shadow-brand-green-1 flex"
+            >
+              <div>
+                <h2 class="text-lg font-bold text-brand-green-1">
+                  {{ picData.brand }} {{ picData.model }}
+                </h2>
+                <p class="text-brand-grey-3">Year: {{ picData.year }}</p>
+                <p class="text-brand-grey-3">Color: {{ picData.color }}</p>
+              </div>
+              <div class="ml-auto mt-4">
+                <button
+                  class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-l-3xl"
+                  @click="
+                    bigPicture = false;
+                    passCarId(picData.id);
+                  "
+                >
+                  Edit
+                </button>
+                <button
+                  class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-r-3xl"
+                  @click="
+                    bigPicture = false;
+                    passCarId(picData.id);
+                  "
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </GDialog>
   </div>
@@ -201,7 +237,8 @@ export default {
     const bigPicture = ref(false);
     const showFilters = ref(false);
 
-    const enlarged = ref(null);
+    const picData = ref({});
+    //const enlarged = ref(null);
     const carIdToDelete = ref(null);
 
     const searchGalleryData = async () => {
@@ -281,8 +318,8 @@ export default {
       searchGalleryData();
     };
 
-    const enlargeImage = (url) => {
-      enlarged.value = url;
+    const enlargeImage = (id, brand, model, year, color, url) => {
+      picData.value = { id, brand, model, year, color, url };
     };
 
     const filteredGalleryData = computed(() => {
@@ -321,7 +358,7 @@ export default {
       deleteCar,
       resetFilters,
       enlargeImage,
-      enlarged,
+      picData,
       bigPicture,
       dialogState,
       showFilters,
