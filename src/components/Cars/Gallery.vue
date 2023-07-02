@@ -153,6 +153,7 @@
       </div>
     </GDialog>
 
+    <!-- Enlarge picture modal -->
     <GDialog v-model="bigPicture" max-width="90%" max-height="90%">
       <div
         class="wrapper fixed inset-0 sm:bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
@@ -182,7 +183,7 @@
                 <p class="text-brand-grey-3">Color: {{ picData.color }}</p>
               </div>
               <div class="ml-auto mt-4">
-                <button
+                <!-- <button
                   class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-l-3xl"
                   @click="
                     bigPicture = false;
@@ -190,7 +191,7 @@
                   "
                 >
                   Edit
-                </button>
+                </button> -->
                 <button
                   class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-r-3xl"
                   @click="
