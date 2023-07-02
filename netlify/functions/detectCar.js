@@ -1,6 +1,6 @@
-import { post } from "axios";
+const axios = require("axios");
 
-export async function handler(event) {
+exports.handler = async function (event) {
   try {
     const { image } = JSON.parse(event.body);
     const formData = new FormData();
@@ -9,7 +9,7 @@ export async function handler(event) {
     const url =
       "https://api.carnet.ai/v2/mmg/detect?box_offset=0&box_min_width=180&box_min_height=180&box_min_ratio=1&box_max_ratio=3.15&box_select=center&region=DEF";
 
-    const response = await post(url, formData, {
+    const response = await axios.post(url, formData, {
       headers: {
         "Content-Type": "application/octet-stream",
         "api-key": "ed4a48c9-edbc-443c-bc1e-703a831b5bbc",
@@ -31,4 +31,4 @@ export async function handler(event) {
       body: error.message,
     };
   }
-}
+};
