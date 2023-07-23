@@ -301,7 +301,6 @@ export default {
           return;
         }
 
-        console.log("Deleted image:");
         alert("Image deleted successfully!");
         searchGalleryData();
       } catch (error) {

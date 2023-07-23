@@ -7,6 +7,7 @@ import ForgotPasswordView from "@/views/ForgotPasswordView.vue";
 import ResetPasswordView from "@/views/ResetPasswordView.vue";
 import UploadCarView from "@/views/UploadCarView.vue";
 import GalleryView from "@/views/GalleryView.vue";
+import RecognizeCarView from "@/views/RecognizeCarView.vue";
 import useAuthUser from "@/composables/UseAuthUser.js";
 
 const routes = [
@@ -66,6 +67,14 @@ const routes = [
       requiresAuth: true,
     },
     component: GalleryView,
+  },
+  {
+    path: "/recognize-car",
+    name: "RecognizeCar",
+    meta: {
+      requiresAuth: true,
+    },
+    component: RecognizeCarView,
   },
   {
     name: "Logout",
