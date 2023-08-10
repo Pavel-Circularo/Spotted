@@ -37,6 +37,17 @@
         <span class="text-gray-700 font-medium">Color:</span>
         {{ carInfo.color[0].name }}
       </p>
+      <h2 class="text-2xl font-medium mb-3 text-center text-teal-600">
+        Looks good? Add it to your garage!
+      </h2>
+      <div class="flex flex-col items-center">
+        <button
+          type="submit"
+          class="mb-3 shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center"
+        >
+          Add
+        </button>
+      </div>
     </div>
     <div
       v-if="alert.show"
@@ -45,7 +56,6 @@
     >
       {{ alert.message }}
     </div>
-    <button type="submit">Submit</button>
   </form>
 </template>
 
@@ -105,6 +115,7 @@ export default {
         .upload(generatedPath.value, file);
     }
     async function onUpload() {
+      carInfo.value = null;
       alert.value.show = false;
       uploadImage();
       const file = fileInput.value.files[0];
@@ -120,19 +131,22 @@ export default {
             "api-key": process.env.VUE_APP_MY_API_KEY,
           },
         });
-        if (response.data.is_success && response.data.detections.length) {
+        if (
+          response.data.is_success &&
+          response.data.detections[0].mmg.length
+        ) {
           carInfo.value = response.data.detections[0];
           form.value.brand = response.data.detections[0].mmg[0].make_name;
           form.value.model = response.data.detections[0].mmg[0].model_name;
           form.value.year = response.data.detections[0].mmg[0].years;
           form.value.color = response.data.detections[0].color[0].name;
         } else {
-          showAlert("Could not recognize car");
+          showAlert("Could not recognize car", "bg-red-500 text-white");
         }
       } catch (error) {
         console.log(error);
         if (error.response.status !== 200) {
-          showAlert("Error during recognition");
+          showAlert("Error during recognition", "bg-red-500 text-white");
         }
       }
     }
@@ -141,7 +155,7 @@ export default {
       const response = await supabase.from("cars").insert(formData);
       let statusCode = response.status;
       if (statusCode == 201) {
-        this.showAlert("Upload successful", "bg-green-500 text-white");
+        this.showAlert("Upload successful", "bg-green-500 text-white bold");
         //this.resetForm();
       } else {
         this.showAlert("Upload failed", "bg-red-500 text-white");
