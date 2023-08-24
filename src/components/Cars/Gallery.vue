@@ -183,15 +183,12 @@
                 <p class="text-brand-grey-3">Color: {{ picData.color }}</p>
               </div>
               <div class="ml-auto mt-4">
-                <!-- <button
+                <button
                   class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-l-3xl"
-                  @click="
-                    bigPicture = false;
-                    passCarId(picData.id);
-                  "
+                  @click="editCar(picData)"
                 >
                   Edit
-                </button> -->
+                </button>
                 <button
                   class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 sm:px-6 sm:py-2.5 text-center text-md px-4 font-medium py-2 rounded-r-3xl"
                   @click="
@@ -202,6 +199,79 @@
                   Delete
                 </button>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </GDialog>
+
+    <!-- Edit car modal -->
+    <GDialog v-model="editDialogState" max-width="90%" max-height="90%">
+      <div
+        class="wrapper fixed inset-0 sm:bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
+      >
+        <div class="relative">
+          <div
+            class="max-w-md w-full bg-brand-white-1 p-4 rounded-lg shadow-lg shadow-brand-green-1"
+          >
+            <h2 class="text-lg font-bold text-brand-green-1 mb-4">Edit Car</h2>
+            <div class="mb-4">
+              <label class="block text-gray-700 font-bold mb-2" for="brand">
+                Brand
+              </label>
+              <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="brand"
+                type="text"
+                v-model="editedCar.brand"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 font-bold mb-2" for="model">
+                Model
+              </label>
+              <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="model"
+                type="text"
+                v-model="editedCar.model"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 font-bold mb-2" for="year">
+                Year
+              </label>
+              <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="year"
+                type="number"
+                v-model="editedCar.year"
+              />
+            </div>
+            <div class="mb-4">
+              <label class="block text-gray-700 font-bold mb-2" for="color">
+                Color
+              </label>
+              <input
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="color"
+                type="text"
+                v-model="editedCar.color"
+              />
+            </div>
+            <div class="flex justify-center">
+              <button
+                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center mr-2"
+                @click="updateCar()"
+              >
+                Save
+              </button>
+              <button
+                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center ml-2"
+                @click="editDialogState = false"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
@@ -241,6 +311,17 @@ export default {
     const picData = ref({});
     //const enlarged = ref(null);
     const carIdToDelete = ref(null);
+
+    const editedCar = ref({
+      id: null,
+      brand: "",
+      model: "",
+      year: "",
+      color: "",
+      url: "",
+    });
+
+    const editDialogState = ref(false);
 
     const searchGalleryData = async () => {
       galleryData.value = [];
@@ -282,6 +363,39 @@ export default {
         console.error(error);
       } else {
         galleryData.value = galleryData.value.concat(cars);
+      }
+    };
+
+    const editCar = (car) => {
+      editedCar.value = { ...car };
+      editDialogState.value = true;
+    };
+
+    const updateCar = async () => {
+      try {
+        const { error } = await supabase
+          .from("cars")
+          .update({
+            brand: editedCar.value.brand,
+            model: editedCar.value.model,
+            year: editedCar.value.year,
+            color: editedCar.value.color,
+          })
+          .eq("id", editedCar.value.id);
+
+        if (error) {
+          console.error("Error updating car:", error);
+          alert("Error updating car. Please try again.");
+          return;
+        }
+
+        alert("Car updated successfully!");
+        searchGalleryData(); // Refresh the gallery data after updating
+        editDialogState.value = false; // Close the edit dialog
+        bigPicture.value = false; // Close the big picture dialog
+      } catch (error) {
+        console.error("Error updating car:", error);
+        alert("An error occurred while updating the car. Please try again.");
       }
     };
 
@@ -362,6 +476,10 @@ export default {
       bigPicture,
       dialogState,
       showFilters,
+      editDialogState,
+      editCar,
+      editedCar,
+      updateCar,
     };
   },
 };
