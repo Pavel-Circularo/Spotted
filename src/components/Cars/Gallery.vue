@@ -156,7 +156,7 @@
     <!-- Enlarge picture modal -->
     <GDialog v-model="bigPicture" max-width="90%" max-height="90%">
       <div
-        class="wrapper fixed inset-0 sm:bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
+        class="wrapper fixed inset-0 bg-opacity-75 flex justify-center items-center z-50"
       >
         <div class="relative">
           <img
@@ -208,7 +208,7 @@
     <!-- Edit car modal -->
     <GDialog v-model="editDialogState" max-width="90%" max-height="90%">
       <div
-        class="wrapper fixed inset-0 sm:bg-gray-900 bg-opacity-75 flex justify-center items-center z-50"
+        class="wrapper fixed inset-0 bg-opacity-75 flex justify-center items-center z-50"
       >
         <div class="relative">
           <div
@@ -220,10 +220,10 @@
                 Brand
               </label>
               <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="brand"
-                type="text"
                 v-model="editedCar.brand"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
               />
             </div>
             <div class="mb-4">
@@ -231,10 +231,10 @@
                 Model
               </label>
               <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="model"
-                type="text"
                 v-model="editedCar.model"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
               />
             </div>
             <div class="mb-4">
@@ -242,10 +242,10 @@
                 Year
               </label>
               <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="year"
-                type="number"
                 v-model="editedCar.year"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="number"
               />
             </div>
             <div class="mb-4">
@@ -253,21 +253,21 @@
                 Color
               </label>
               <input
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 id="color"
-                type="text"
                 v-model="editedCar.color"
+                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                type="text"
               />
             </div>
             <div class="flex justify-center">
               <button
-                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center mr-2"
+                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center mr-2"
                 @click="updateCar()"
               >
                 Save
               </button>
               <button
-                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center ml-2"
+                class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-red-400 via-red-500 to-orange-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800 font-medium rounded-3xl text-md px-6 py-2.5 text-center ml-2"
                 @click="editDialogState = false"
               >
                 Cancel
