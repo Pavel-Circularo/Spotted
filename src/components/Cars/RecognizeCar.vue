@@ -67,12 +67,6 @@ import useSupabase from "@/composables/UseSupabase.js";
 import useAuthUser from "@/composables/UseAuthUser.js";
 
 export default {
-  /* props: {
-    submitForm: {
-      type: Function,
-      required: true,
-    },
-  }, */
   setup() {
     const carInfo = ref(null);
     const generatedPath = ref(null);
@@ -91,38 +85,36 @@ export default {
       message: "",
       type: "",
     });
-    const showAlert = (message, type) => {
-      alert.value.message = message;
-      alert.value.show = true;
-      alert.value.type = type;
+
+    const showAlert = ({ message, type }) => {
+      alert.value = { show: true, message, type };
     };
-    /* const submitRecognizeForm = () => {
-      props.submitForm(form);
-    }; */
+
     onMounted(() => {
       fileInput.value = document.querySelector("input[type=file]");
     });
+
     onBeforeMount(() => {
-      generatedPath.value = user._rawValue.id + "/" + uuidv4();
+      generatedPath.value = `${user._rawValue.id}/${uuidv4()}`;
       form.value.url += generatedPath.value;
     });
+
     async function uploadImage() {
       const file = fileInput.value.files[0];
-
-      // eslint-disable-next-line no-unused-vars
       const response = await supabase.storage
         .from("images")
         .upload(generatedPath.value, file);
+      if (response.error) {
+        console.log(response.error);
+      }
     }
-    async function onUpload() {
-      carInfo.value = null;
-      alert.value.show = false;
-      uploadImage();
-      const file = fileInput.value.files[0];
+
+    async function recognizeCar(file) {
       const formData = new FormData();
       formData.append("image", file);
-
-      const url = "http://127.0.0.1:5000/upload";
+      const url =
+        process.env.VUE_APP_RECOGNITION_URL ||
+        "http://sallient.pythonanywhere.com/upload";
 
       try {
         const response = await axios.post(url, formData, {
@@ -131,35 +123,48 @@ export default {
             "api-key": process.env.VUE_APP_MY_API_KEY,
           },
         });
+
         if (
           response.data.is_success &&
           response.data.detections[0].mmg.length
         ) {
           carInfo.value = response.data.detections[0];
-          form.value.brand = response.data.detections[0].mmg[0].make_name;
-          form.value.model = response.data.detections[0].mmg[0].model_name;
-          form.value.year = response.data.detections[0].mmg[0].years;
-          form.value.color = response.data.detections[0].color[0].name;
+          form.value.brand = carInfo.value.mmg[0].make_name;
+          form.value.model = carInfo.value.mmg[0].model_name;
+          form.value.year = carInfo.value.mmg[0].years;
+          form.value.color = carInfo.value.color[0].name;
         } else {
-          showAlert("Could not recognize car", "bg-red-500 text-white");
+          showAlert({
+            message: "Could not recognize car",
+            type: "bg-red-500 text-white",
+          });
         }
       } catch (error) {
-        console.log(error);
-        if (error.response.status !== 200) {
-          showAlert("Error during recognition", "bg-red-500 text-white");
-        }
+        showAlert({
+          message: "Error during recognition",
+          type: "bg-red-500 text-white",
+        });
       }
     }
+
+    async function onUpload() {
+      carInfo.value = null;
+      alert.value.show = false;
+      uploadImage();
+      const file = fileInput.value.files[0];
+      recognizeCar(file);
+    }
+
     async function submitForm() {
       const formData = { ...form.value, user: user._rawValue.id };
       const response = await supabase.from("cars").insert(formData);
-      let statusCode = response.status;
-      if (statusCode == 201) {
-        this.showAlert("Upload successful", "bg-green-500 text-white bold");
-        //this.resetForm();
+      if (response.status === 201) {
+        showAlert({
+          message: "Upload successful",
+          type: "bg-green-500 text-white bold",
+        });
       } else {
-        this.showAlert("Upload failed", "bg-red-500 text-white");
-        console.log(response.error);
+        showAlert({ message: "Upload failed", type: "bg-red-500 text-white" });
       }
     }
 
