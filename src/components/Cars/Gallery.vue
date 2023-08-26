@@ -206,56 +206,58 @@
     </GDialog>
 
     <!-- Edit car modal -->
-    <GDialog v-model="editDialogState" max-width="90%" max-height="90%">
+    <GDialog v-model="editDialogState" max-width="100%" max-height="90%">
       <div
         class="wrapper fixed inset-0 bg-opacity-75 flex justify-center items-center z-50"
       >
         <div class="relative">
           <div
-            class="max-w-md w-full bg-brand-white-1 p-4 rounded-lg shadow-lg shadow-brand-green-1"
+            class="max-w-2xl w-full bg-white p-6 rounded-lg shadow-lg shadow-brand-green-1"
           >
-            <h2 class="text-lg font-bold text-brand-green-1 mb-4">Edit Car</h2>
-            <div class="mb-4">
-              <label class="block text-gray-700 font-bold mb-2" for="brand">
+            <h2 class="text-3xl font-medium text-teal-600 mb-4 text-center">
+              Edit car info
+            </h2>
+            <div class="mb-2">
+              <label class="block text-gray-700 font-medium mb-1" for="brand">
                 Brand
               </label>
               <input
                 id="brand"
                 v-model="editedCar.brand"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
                 type="text"
               />
             </div>
-            <div class="mb-4">
-              <label class="block text-gray-700 font-bold mb-2" for="model">
+            <div class="mb-2">
+              <label class="block text-gray-700 font-medium mb-1" for="model">
                 Model
               </label>
               <input
                 id="model"
                 v-model="editedCar.model"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
                 type="text"
               />
             </div>
-            <div class="mb-4">
-              <label class="block text-gray-700 font-bold mb-2" for="year">
+            <div class="mb-2">
+              <label class="block text-gray-700 font-medium mb-1" for="year">
                 Year
               </label>
               <input
                 id="year"
                 v-model="editedCar.year"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
                 type="number"
               />
             </div>
             <div class="mb-4">
-              <label class="block text-gray-700 font-bold mb-2" for="color">
+              <label class="block text-gray-700 font-medium mb-1" for="color">
                 Color
               </label>
               <input
                 id="color"
                 v-model="editedCar.color"
-                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
                 type="text"
               />
             </div>

@@ -112,9 +112,7 @@ export default {
     async function recognizeCar(file) {
       const formData = new FormData();
       formData.append("image", file);
-      const url =
-        process.env.VUE_APP_RECOGNITION_URL ||
-        "http://sallient.pythonanywhere.com/upload";
+      const url = "http://sallient.pythonanywhere.com/upload";
 
       try {
         const response = await axios.post(url, formData, {
