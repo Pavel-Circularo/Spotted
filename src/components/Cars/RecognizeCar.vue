@@ -19,6 +19,12 @@
         @change="onUpload"
       />
     </div>
+    <div v-if="loading" class="flex justify-center items-center mt-5">
+      <div
+        class="animate-spin rounded-full h-10 w-10 border-b-2 border-teal-600"
+      ></div>
+    </div>
+
     <div v-if="carInfo">
       <p class="mb-2">
         <span class="text-gray-700 font-medium">Brand:</span>
@@ -85,6 +91,7 @@ export default {
       message: "",
       type: "",
     });
+    const loading = ref(false);
 
     const showAlert = ({ message, type }) => {
       alert.value = { show: true, message, type };
@@ -110,6 +117,7 @@ export default {
     }
 
     async function recognizeCar(file) {
+      loading.value = true;
       const formData = new FormData();
       formData.append("image", file);
       const url = "http://sallient.pythonanywhere.com/upload";
@@ -121,6 +129,7 @@ export default {
             "api-key": process.env.VUE_APP_MY_API_KEY,
           },
         });
+        loading.value = false;
 
         if (
           response.data.is_success &&
@@ -138,6 +147,7 @@ export default {
           });
         }
       } catch (error) {
+        loading.value = false;
         showAlert({
           message: "Error during recognition",
           type: "bg-red-500 text-white",
@@ -176,6 +186,7 @@ export default {
       submitForm,
       generatedPath,
       uploadImage,
+      loading,
     };
   },
 };
