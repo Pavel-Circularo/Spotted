@@ -2,7 +2,11 @@
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 module.exports = {
-  content: ["./public/**/*.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
+  content: [
+    "./public/**/*.html",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./node_modules/flowbite/**/*.js",
+  ],
   theme: {
     extend: {
       fontFamily: {
@@ -41,5 +45,5 @@ module.exports = {
       margin: ["first"],
     },
   },
-  plugins: [],
+  plugins: [require("flowbite/plugin")],
 };

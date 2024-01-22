@@ -7,9 +7,39 @@
     {{ alert.message }}
   </div>
   <div class="flex flex-col items-center justify-center my-14 md:mx-0 mx-5">
+    <div class="justify-center w-full max-w-lg">
+      <button
+        type="button"
+        :class="{
+          'w-1/2 text-xl rounded-tl-lg py-2': true,
+          'bg-white border-b-0': isUploadComponent,
+          'bg-gray-200 border-b border-gray-300': !isUploadComponent,
+          'text-gray-900': isUploadComponent,
+          'text-gray-500': !isUploadComponent,
+        }"
+        @click="toggleComponent(true)"
+      >
+        Upload
+      </button>
+      <button
+        type="button"
+        :class="{
+          'w-1/2 text-xl rounded-tr-lg py-2': true,
+          'bg-white border-b-0': !isUploadComponent,
+          'bg-gray-200 border-b border-gray-300 ': isUploadComponent,
+          'text-gray-900': !isUploadComponent,
+          'text-gray-500': isUploadComponent,
+        }"
+        @click="toggleComponent(false)"
+      >
+        Recognize
+      </button>
+    </div>
+
     <form
-      class="bg-white p-6 rounded-lg shadow-md w-full max-w-lg"
-      @submit.prevent="submitForm()"
+      v-if="isUploadComponent"
+      class="bg-white p-6 rounded-b-lg shadow-md w-full max-w-lg"
+      @submit.prevent="submitForm(form)"
     >
       <h1 class="text-3xl font-medium mb-6 text-center text-teal-600">
         Add a car to your garage
@@ -71,7 +101,7 @@
         >
         <input
           id="image"
-          class="bg-gray-200 p-2 rounded-lg w-full shadow-md"
+          class="bg-gray-200 rounded-lg w-full shadow-md"
           type="file"
           accept=".png, .jpg"
           @change="uploadImage"
@@ -93,6 +123,7 @@
         </button>
       </div>
     </form>
+    <RecognizeCarVue v-else :submit-form="submitForm" />
   </div>
 </template>
 
@@ -101,11 +132,16 @@
 import useAuthUser from "@/composables/UseAuthUser.js";
 import useSupabase from "@/composables/UseSupabase.js";
 import { v4 as uuidv4 } from "uuid";
+import RecognizeCarVue from "@/components/Cars/RecognizeCar.vue";
 
 export default {
   name: "UploadForm",
+  components: {
+    RecognizeCarVue,
+  },
   data() {
     return {
+      isUploadComponent: true,
       brands: [],
       user: "",
       generatedPath: "",
@@ -150,6 +186,9 @@ export default {
     this.fileInput = document.querySelector("input[type=file]");
   },
   methods: {
+    toggleComponent() {
+      this.isUploadComponent = !this.isUploadComponent;
+    },
     async uploadImage() {
       const file = this.fileInput.files[0];
       //const { user } = useAuthUser();
@@ -229,6 +268,20 @@ export default {
         this.showAlert("Upload failed", "bg-red-500 text-white");
       }
     },
+    /* async submitForm(form) {
+      const { user } = useAuthUser();
+      const formData = { ...form, user: user._rawValue.id };
+      const { supabase } = useSupabase();
+      const response = await supabase.from("cars").insert(formData);
+      let statusCode = response.status;
+      if (statusCode == 201) {
+        this.showAlert("Upload successful", "bg-green-500 text-white");
+        //this.resetForm();
+      } else {
+        this.showAlert("Upload failed", "bg-red-500 text-white");
+        console.log(response.error);
+      }
+    }, */
     resetForm() {
       this.form.brand = "";
       this.form.model = "";
@@ -240,14 +293,3 @@ export default {
   },
 };
 </script>
-<style>
-input[type="file"]::-webkit-file-upload-button {
-  background-color: #e0eaef;
-  color: #012f41;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #80868b;
-  font-size: 0.9rem;
-  cursor: pointer;
-}
-</style>
