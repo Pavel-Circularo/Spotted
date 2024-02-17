@@ -120,7 +120,7 @@ export default {
       loading.value = true;
       const formData = new FormData();
       formData.append("image", file);
-      const url = "http://sallient.pythonanywhere.com/upload";
+      const url = "https://sallient.pythonanywhere.com/upload";
 
       try {
         const response = await axios.post(url, formData, {
