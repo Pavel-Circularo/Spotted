@@ -29,47 +29,10 @@
 
     <!-- Advanced search modal -->
     <GDialog v-model="showFilters" max-width="300">
-      <div class="my-10 flex items-center justify-center gap-4 mx-5">
-        <div class="flex flex-col gap-4">
-          <input
-            v-model="brandFilter"
-            type="text"
-            placeholder="Brand"
-            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-          />
-          <input
-            v-model="modelFilter"
-            type="text"
-            placeholder="Model"
-            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-          />
-          <input
-            v-model="yearFilter"
-            type="text"
-            placeholder="Year"
-            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-          />
-          <input
-            v-model="colorFilter"
-            type="text"
-            placeholder="Color"
-            class="border-gray-400 border-2 rounded-lg p-2 shadow-brand-green-1 shadow-md bg-brand-white-1"
-          />
-          <div
-            class="mt-2 flex flex-wrap justify-center items-center gap-4 mx-5"
-          >
-            <button
-              class="shadow-brand-green-1 shadow-md text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-md px-6 py-2.5 text-center"
-              @click="
-                searchGalleryData();
-                showFilters = false;
-              "
-            >
-              Search
-            </button>
-          </div>
-        </div>
-      </div>
+      <AdvancedSearchModal
+        v-model="showFilters"
+        @search="handleAdvancedSearch"
+      />
     </GDialog>
 
     <div v-if="filteredGalleryData.length == 0">
@@ -278,11 +241,13 @@ import { ref, onMounted, computed } from "vue";
 import useSupabase from "@/composables/UseSupabase.js";
 import useAuthUser from "@/composables/UseAuthUser.js";
 import SearchInput from "@/components/Cars/SearchInput.vue";
+import AdvancedSearchModal from "@/components/Cars/modals/AdvancedSearchModal.vue";
 
 export default {
   name: "Gallery",
   components: {
     SearchInput,
+    AdvancedSearchModal,
   },
   setup() {
     // Gallery data + auth user
@@ -327,40 +292,28 @@ export default {
     };
 
     // Fetch gallery data from Supabase based on user and search/filter criteria
-    const fetchGalleryData = async () => {
-      let query = supabase
-        .from("cars")
-        .select("*")
-        .eq("user", user._rawValue.id);
+    const fetchGalleryData = async (filters = {}) => {
+      let query = supabase.from("cars").select("*").eq("user", user.value.id);
 
-      if (basicSearch.value !== "") {
-        query = query.textSearch("brand_model", `${basicSearch.value}`);
-      }
-      if (brandFilter.value !== "") {
-        query = query.ilike("brand", `%${brandFilter.value}%`);
-      }
-      if (modelFilter.value !== "") {
-        query = query.ilike("model", `%${modelFilter.value}%`);
-      }
-      if (yearFilter.value !== "") {
-        query = query.eq("year", yearFilter.value);
-      }
-      if (colorFilter.value !== "") {
-        query = query.ilike("color", `%${colorFilter.value}%`);
-      }
+      // Apply filters if they exist
+      if (filters.brand) query = query.ilike("brand", `%${filters.brand}%`);
+      if (filters.model) query = query.ilike("model", `%${filters.model}%`);
+      if (filters.year) query = query.eq("year", filters.year);
+      if (filters.color) query = query.ilike("color", `%${filters.color}%`);
 
-      let { data: cars, error } = await query
-        .order("created_at", { ascending: false })
-        .range(
-          (currentPage.value - 1) * pageSize,
-          currentPage.value * pageSize - 1
-        );
+      let { data: cars, error } = await query.order("created_at", {
+        ascending: false,
+      });
 
       if (error) {
         console.error(error);
       } else {
-        galleryData.value = galleryData.value.concat(cars);
+        galleryData.value = cars;
       }
+    };
+
+    const handleAdvancedSearch = (filters) => {
+      fetchGalleryData(filters);
     };
 
     const editCar = (car) => {
@@ -477,6 +430,7 @@ export default {
       editCar,
       editedCar,
       updateCar,
+      handleAdvancedSearch,
     };
   },
 };

@@ -6,7 +6,7 @@
 import Gallery from "@/components/Cars/Gallery.vue";
 
 export default {
-  name: "UploadCarView",
+  name: "GalleryView",
   components: { Gallery },
 };
 </script>
